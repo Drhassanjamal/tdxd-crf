@@ -295,16 +295,22 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="field">
             <label>Site <span class="req">*</span></label>
-            <select id="a_site" onchange="calcProgA()">
+            <select id="a_site" onchange="toggleOtherSite(); calcProgA()">
               <option value="">Select center</option>
-              <option>AMH — Al-Amal National Oncology Center</option>
-              <option>BGH — Baghdad Teaching Hospital</option>
-              <option>BAS — Basra Oncology Center</option>
-              <option>MOS — Mosul Cancer Center</option>
-              <option>NJF — Najaf Oncology Unit</option>
-              <option>KRB — Karbala Cancer Center</option>
-              <option>OTH — Other</option>
+              <option>مستشفى الامل الوطني لعلاج الاورام</option>
+              <option>مستشفى الاورام التعليمي</option>
+              <option>مستشفى الامامين الجوادين — مركز الامام الجواد لعلاج الاورام</option>
+              <option>مستشفى اليرموك — مركز علاج الاورام</option>
+              <option>مركز النجف لعلاج الاورام</option>
+              <option>مركز كربلاء لعلاج الاورام</option>
+              <option>Other</option>
             </select>
+          </div>
+          <div class="cond" id="other-site-cond">
+            <div class="field">
+              <label>Center name <span class="req">*</span></label>
+              <input type="text" id="a_site_other" placeholder="اكتب اسم المركز" oninput="calcProgA()">
+            </div>
           </div>
           <div class="field-row">
             <div class="field">
@@ -919,6 +925,8 @@ function pickGrade(item, n, btn) {
 
 // ── UI HELPERS ───────────────────────────────────────────────
 function showCond(id, show) { document.getElementById(id).classList.toggle('show', !!show); }
+function toggleOtherSite() { showCond('other-site-cond', document.getElementById('a_site').value === 'Other'); }
+function getSiteValue() { const s = document.getElementById('a_site').value; return s === 'Other' ? (document.getElementById('a_site_other').value.trim()||'Other') : s; }
 function toggleCheck(label) { const cb = label.querySelector('input'); setTimeout(() => label.classList.toggle('checked', cb.checked), 0); }
 function getChecked(name) { return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c=>c.value).join(', '); }
 function setChecked(name, csv) {
@@ -987,7 +995,7 @@ function collectA() {
     id: editingPatientId || Date.now().toString(),
     name: document.getElementById('a_name').value.trim(),
     phone: document.getElementById('a_phone').value.trim(),
-    site: document.getElementById('a_site').value,
+    site: getSiteValue(),
     sex: document.getElementById('a_sex').value,
     yob: document.getElementById('a_yob').value,
     metDate: document.getElementById('a_metdate').value,
@@ -1032,7 +1040,8 @@ function collectA() {
 function populateA(p) {
   document.getElementById('a_name').value = p.name||'';
   document.getElementById('a_phone').value = p.phone||'';
-  document.getElementById('a_site').value = p.site||'';
+  const knownSites = ['مستشفى الامل الوطني لعلاج الاورام','مستشفى الاورام التعليمي','مستشفى الامامين الجوادين — مركز الامام الجواد لعلاج الاورام','مستشفى اليرموك — مركز علاج الاورام','مركز النجف لعلاج الاورام','مركز كربلاء لعلاج الاورام','Other',''];
+  if (knownSites.includes(p.site||'')) { document.getElementById('a_site').value = p.site||''; } else { document.getElementById('a_site').value = 'Other'; document.getElementById('a_site_other').value = p.site||''; showCond('other-site-cond', true); }
   document.getElementById('a_sex').value = p.sex||'';
   document.getElementById('a_yob').value = p.yob||'';
   document.getElementById('a_metdate').value = p.metDate||'';
@@ -1102,7 +1111,7 @@ function clearA() {
     if (el.type === 'checkbox') el.checked = false; else el.value = '';
   });
   document.querySelectorAll('#screen-formA .check-item').forEach(l => l.classList.remove('checked'));
-  ['cns-cond','lung-cond','hrct-cond'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['cns-cond','lung-cond','hrct-cond','other-site-cond'].forEach(id => document.getElementById(id).classList.remove('show'));
   document.getElementById('edit-banner-a').classList.remove('show');
   document.getElementById('save-a-btn').textContent = '💾 Save patient record';
   editingPatientId = null;
