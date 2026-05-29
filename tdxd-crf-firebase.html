@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="T-DXd CRF">
+<meta name="theme-color" content="#ffffff">
+<title>T-DXd Study CRF</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1a56db;
+  --blue-light: #e8effd;
+  --blue-mid: #c3d5fb;
+  --blue-dark: #1140a6;
+  --bg: #f8f9fc;
+  --bg-card: #ffffff;
+  --border: #e5e9f2;
+  --border2: #cdd4e8;
+  --text: #111827;
+  --text2: #4b5563;
+  --text3: #9ca3af;
+  --green: #059669;
+  --green-bg: #d1fae5;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --orange: #ea580c;
+  --orange-bg: #ffedd5;
+  --purple: #7c3aed;
+  --purple-bg: #ede9fe;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --shadow: 0 1px 4px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; font-size: 15px; }
+
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* SETUP SCREEN */
+.setup-screen { position: fixed; inset: 0; background: #fff; z-index: 9000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
+.setup-screen.hidden { display: none; }
+.setup-logo { font-size: 40px; margin-bottom: 12px; }
+.setup-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; letter-spacing: -0.5px; }
+.setup-sub { font-size: 14px; color: var(--text3); margin-bottom: 28px; text-align: center; font-weight: 500; line-height: 1.6; }
+.setup-form { width: 100%; max-width: 360px; }
+.setup-field { margin-bottom: 14px; }
+.setup-field label { display: block; font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+.setup-field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; background: var(--bg); color: var(--text); }
+.setup-field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+.setup-note { font-size: 11px; color: var(--text3); margin-top: 5px; font-weight: 500; }
+.setup-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0; color: var(--text3); font-size: 12px; font-weight: 600; }
+.setup-divider::before, .setup-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+.setup-steps { background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; }
+.setup-steps-title { font-size: 12px; font-weight: 800; color: var(--blue); margin-bottom: 10px; }
+.setup-step { display: flex; gap: 10px; margin-bottom: 9px; font-size: 12px; color: var(--text2); font-weight: 500; line-height: 1.4; }
+.setup-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.setup-step code { background: rgba(26,86,219,.1); color: var(--blue); padding: 1px 5px; border-radius: 4px; font-size: 11px; font-family: monospace; }
+
+/* DOCTOR BANNER */
+.doctor-banner { background: var(--blue-light); border-bottom: 1px solid var(--blue-mid); padding: 7px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.doctor-name { font-size: 12px; font-weight: 700; color: var(--blue); }
+.doctor-change { font-size: 11px; color: var(--blue); text-decoration: underline; cursor: pointer; font-weight: 600; }
+
+/* SYNC STATUS */
+.sync-bar { height: 3px; background: var(--border); flex-shrink: 0; position: relative; overflow: hidden; }
+.sync-bar-fill { position: absolute; inset: 0; background: var(--green); transform: translateX(-100%); transition: transform .4s; }
+.sync-bar-fill.syncing { animation: syncAnim 1.2s ease-in-out infinite; }
+.sync-bar-fill.synced { transform: translateX(0); }
+@keyframes syncAnim { 0%{transform:translateX(-100%)} 50%{transform:translateX(0)} 100%{transform:translateX(100%)} }
+
+/* HEADER */
+.header { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px 10px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); }
+.header-back { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--bg); display: none; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); font-size: 20px; font-weight: 600; flex-shrink: 0; }
+.header-back.visible { display: flex; }
+.header-title { flex: 1; }
+.header-title h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+.header-title p { font-size: 12px; color: var(--text3); margin-top: 1px; font-weight: 500; }
+.header-actions { display: flex; gap: 6px; }
+.header-btn { height: 34px; padding: 0 12px; border-radius: 8px; border: 1.5px solid var(--border2); background: var(--bg); display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text2); font-size: 12px; font-weight: 600; font-family: inherit; }
+.header-btn:active { background: var(--blue-light); }
+.sync-icon { font-size: 15px; }
+
+/* CONTENT */
+.content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; background: var(--bg); }
+.content-inner { padding: 16px; padding-bottom: 96px; }
+
+/* BOTTOM NAV */
+.bottom-nav { flex-shrink: 0; background: #fff; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(5,1fr); box-shadow: 0 -2px 12px rgba(0,0,0,.06); }
+.nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 9px 4px 13px; cursor: pointer; gap: 3px; }
+.nav-icon { font-size: 19px; color: var(--text3); transition: color .15s; }
+.nav-label { font-size: 10px; color: var(--text3); font-weight: 600; transition: color .15s; }
+.nav-item.active .nav-icon { color: var(--blue); }
+.nav-item.active .nav-label { color: var(--blue); }
+.nav-item:active { opacity: .7; }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* CARDS */
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+.card-title { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+
+/* STATS */
+.stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow-sm); }
+.stat-val { font-size: 30px; font-weight: 800; letter-spacing: -1.5px; }
+.stat-label { font-size: 12px; color: var(--text3); margin-top: 2px; font-weight: 500; }
+.stat-card.blue .stat-val { color: var(--blue); }
+.stat-card.green .stat-val { color: var(--green); }
+.stat-card.amber .stat-val { color: var(--amber); }
+.stat-card.red .stat-val { color: var(--red); }
+
+/* BADGES */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.badge-a { background: var(--blue-light); color: var(--blue); }
+.badge-b { background: var(--purple-bg); color: var(--purple); }
+.badge-c { background: var(--orange-bg); color: var(--orange); }
+.badge-ild { background: var(--red-bg); color: var(--red); }
+.badge-ok { background: var(--green-bg); color: var(--green); }
+
+/* PATIENT ROWS */
+.patient-row { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); }
+.patient-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: var(--blue); flex-shrink: 0; }
+.patient-info { flex: 1; min-width: 0; }
+.patient-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.patient-entered-by { font-size: 11px; color: var(--text3); margin-top: 1px; font-weight: 500; }
+.patient-meta { font-size: 12px; color: var(--text3); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.patient-badges { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.patient-actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
+.pat-action-btn { width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid var(--border2); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+.pat-action-btn:active { background: var(--blue-light); }
+.pat-action-btn.del { border-color: #fecaca; background: #fff5f5; }
+.pat-action-btn.del:active { background: var(--red-bg); }
+
+/* FORM FIELDS */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 6px; letter-spacing: .02em; }
+.field .req { color: var(--red); margin-left: 2px; }
+.field input, .field select, .field textarea {
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text); font-size: 15px; font-weight: 500;
+  padding: 12px 14px; font-family: inherit; transition: border-color .15s, box-shadow .15s;
+  -webkit-appearance: none; appearance: none;
+}
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); background: #fff; }
+.field textarea { resize: none; min-height: 70px; }
+.field-note { font-size: 11px; color: var(--text3); margin-top: 4px; font-weight: 500; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field-row .field { margin-bottom: 0; }
+
+/* CONDITIONAL */
+.cond { border-left: 3px solid var(--blue-mid); padding-left: 14px; margin-top: 10px; margin-bottom: 4px; display: none; }
+.cond.show { display: block; }
+
+/* CHECKBOX GROUP */
+.check-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.check-item { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--bg); border: 1.5px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text2); transition: all .15s; }
+.check-item input { width: 15px; height: 15px; accent-color: var(--blue); flex-shrink: 0; }
+.check-item.checked { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue); }
+
+/* CTCAE */
+.ctcae-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.ctcae-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.ctcae-label { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+.grade-row { display: flex; gap: 5px; }
+.grade-btn { flex: 1; height: 36px; border-radius: var(--radius-xs); border: 1.5px solid var(--border2); background: var(--bg); color: var(--text3); font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .15s; }
+.grade-btn:active { transform: scale(.95); }
+.grade-btn.g0.sel { background: var(--green-bg); color: var(--green); border-color: #6ee7b7; }
+.grade-btn.g1.sel { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.grade-btn.g2.sel { background: var(--amber-bg); color: var(--amber); border-color: #fcd34d; }
+.grade-btn.g3.sel { background: var(--orange-bg); color: var(--orange); border-color: #fdba74; }
+.grade-btn.g4.sel { background: var(--red-bg); color: var(--red); border-color: #fca5a5; }
+.grade-btn.g5.sel { background: #450a0a; color: #fca5a5; border-color: var(--red); }
+
+/* PROGRESS */
+.progress-wrap { margin-bottom: 16px; }
+.progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #60a5fa); border-radius: 2px; transition: width .4s ease; }
+.progress-label { font-size: 11px; color: var(--text3); margin-top: 5px; font-weight: 500; }
+
+/* BUTTONS */
+.btn { width: 100%; padding: 14px; border-radius: var(--radius-sm); border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: all .15s; letter-spacing: -0.2px; font-family: inherit; }
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(26,86,219,.25); }
+.btn-primary:active { background: var(--blue-dark); }
+.btn-ghost { background: var(--bg); color: var(--text2); border: 1.5px solid var(--border2); margin-top: 8px; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1.5px solid #fecaca; margin-top: 8px; }
+.btn-export { background: var(--blue-light); color: var(--blue); border: 1.5px solid var(--blue-mid); margin-bottom: 12px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%) translateY(16px); background: #fff; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); padding: 11px 20px; font-size: 14px; font-weight: 600; opacity: 0; transition: all .25s; z-index: 9999; white-space: nowrap; max-width: calc(100vw - 32px); text-align: center; box-shadow: var(--shadow); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: #6ee7b7; color: var(--green); }
+.toast.error { border-color: #fca5a5; color: var(--red); }
+.toast.info { border-color: var(--blue-mid); color: var(--blue); }
+
+/* QUICK ACTIONS */
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.quick-btn { background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: all .15s; text-align: left; box-shadow: var(--shadow-sm); }
+.quick-btn:active { background: var(--blue-light); border-color: var(--blue-mid); }
+.quick-btn .qb-icon { font-size: 24px; margin-bottom: 8px; }
+.quick-btn .qb-label { font-size: 13px; font-weight: 700; color: var(--text); }
+.quick-btn .qb-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-weight: 500; }
+
+/* EMPTY */
+.empty { text-align: center; padding: 40px 20px; color: var(--text3); }
+.empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty p { font-size: 14px; font-weight: 500; line-height: 1.6; }
+
+/* SECTION HEADER */
+.section-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-hd h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.5px; }
+
+/* INFO ROW */
+.info-row { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 12px; color: var(--blue); font-weight: 600; line-height: 1.5; }
+
+/* CONFIRM DIALOG */
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+.confirm-overlay.show { display: flex; }
+.confirm-box { background: #fff; border-radius: var(--radius); padding: 24px; width: 100%; max-width: 320px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+.confirm-icon { font-size: 36px; margin-bottom: 12px; }
+.confirm-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+.confirm-msg { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; font-weight: 500; }
+.confirm-btns { display: flex; gap: 8px; }
+.confirm-btns .btn { margin: 0; }
+
+/* EDITING BANNER */
+.editing-banner { background: var(--amber-bg); border: 1px solid #fcd34d; border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--amber); display: none; }
+.editing-banner.show { display: block; }
+
+/* OFFLINE BANNER */
+.offline-banner { background: #fef3c7; border-bottom: 1px solid #fcd34d; padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--amber); text-align: center; display: none; flex-shrink: 0; }
+.offline-banner.show { display: block; }
+
+/* CONFIG MODAL */
+.config-modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 5000; display: none; align-items: flex-end; justify-content: center; }
+.config-modal.show { display: flex; }
+.config-box { background: #fff; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 80vh; overflow-y: auto; }
+.config-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.config-sub { font-size: 13px; color: var(--text3); margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SETUP SCREEN (shown on first launch) -->
+  <div class="setup-screen" id="setup-screen">
+    <div class="setup-logo">🔬</div>
+    <div class="setup-title">T-DXd CRF Setup</div>
+    <div class="setup-sub">Connect to Firebase for real-time sync across all doctors</div>
+    <div class="setup-form">
+
+      <div class="setup-steps">
+        <div class="setup-steps-title">📋 How to get your Firebase config (5 min, free)</div>
+        <div class="setup-step"><div class="setup-step-num">1</div><div>Go to <code>console.firebase.google.com</code> → Create a new project (e.g. "TDXd-Study")</div></div>
+        <div class="setup-step"><div class="setup-step-num">2</div><div>Click <strong>Build → Firestore Database</strong> → Create database → Start in <strong>test mode</strong></div></div>
+        <div class="setup-step"><div class="setup-step-num">3</div><div>Go to <strong>Project Settings</strong> (gear icon) → <strong>Your apps</strong> → Add web app (&lt;/&gt;) → Register</div></div>
+        <div class="setup-step"><div class="setup-step-num">4</div><div>Copy the <code>firebaseConfig</code> values and paste them below</div></div>
+        <div class="setup-step"><div class="setup-step-num">5</div><div>Share the same config (or this page URL) with your colleagues — everyone connects to the same database</div></div>
+      </div>
+
+      <div class="setup-field">
+        <label>API Key <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_apiKey" placeholder="AIzaSy...">
+      </div>
+      <div class="setup-field">
+        <label>Project ID <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_projectId" placeholder="tdxd-study-xxxxx">
+      </div>
+      <div class="setup-field">
+        <label>App ID <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_appId" placeholder="1:123456789:web:abcdef...">
+      </div>
+      <div class="setup-field">
+        <label>Auth Domain</label>
+        <input type="text" id="cfg_authDomain" placeholder="tdxd-study.firebaseapp.com">
+        <div class="setup-note">Usually: [projectId].firebaseapp.com</div>
+      </div>
+
+      <div class="setup-divider">then</div>
+
+      <div class="setup-field">
+        <label>Your Name (Doctor) <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_doctor" placeholder="e.g. Dr. Hassan Al-Bazaz">
+      </div>
+
+      <button class="btn btn-primary" onclick="saveConfig()" style="margin-top:8px">Connect to Firebase →</button>
+    </div>
+  </div>
+
+  <!-- OFFLINE BANNER -->
+  <div class="offline-banner" id="offline-banner">⚠️ Offline — changes will sync when connection is restored</div>
+
+  <!-- DOCTOR BANNER -->
+  <div class="doctor-banner" id="doctor-banner">
+    <span class="doctor-name" id="doctor-name-display">👨‍⚕️ Dr. —</span>
+    <span class="doctor-change" onclick="showConfigModal()">Change / Settings</span>
+  </div>
+
+  <!-- SYNC BAR -->
+  <div class="sync-bar"><div class="sync-bar-fill" id="sync-fill"></div></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-back" id="hdr-back" onclick="goBack()">‹</div>
+    <div class="header-title">
+      <h1 id="hdr-title">T-DXd Study</h1>
+      <p id="hdr-sub">Iraqi Multicenter Cohort</p>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="exportExcel()">⬇ Excel</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="content-inner">
+
+      <!-- DASHBOARD -->
+      <div id="screen-dash" class="screen active">
+        <div class="stats-row">
+          <div class="stat-card blue"><div class="stat-val" id="s-patients">0</div><div class="stat-label">Patients enrolled</div></div>
+          <div class="stat-card green"><div class="stat-val" id="s-cycles">0</div><div class="stat-label">Cycle records</div></div>
+          <div class="stat-card amber"><div class="stat-val" id="s-eot">0</div><div class="stat-label">EOT records</div></div>
+          <div class="stat-card red"><div class="stat-val" id="s-ild">0</div><div class="stat-label">ILD events</div></div>
+        </div>
+        <div class="quick-grid">
+          <div class="quick-btn" onclick="startNewA()">
+            <div class="qb-icon">🧑‍⚕️</div>
+            <div class="qb-label">New patient</div>
+            <div class="qb-sub">Form A — Baseline</div>
+          </div>
+          <div class="quick-btn" onclick="goTo('formB')">
+            <div class="qb-icon">🔄</div>
+            <div class="qb-label">Cycle entry</div>
+            <div class="qb-sub">Form B — Follow-up</div>
+          </div>
+          <div class="quick-btn" onclick="goTo('formC')">
+            <div class="qb-icon">🏁</div>
+            <div class="qb-label">EOT record</div>
+            <div class="qb-sub">Form C — End of Tx</div>
+          </div>
+          <div class="quick-btn" onclick="exportExcel()">
+            <div class="qb-icon">📊</div>
+            <div class="qb-label">Export Excel</div>
+            <div class="qb-sub">All 3 sheets</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent patients</div>
+          <div id="recent-list"></div>
+        </div>
+      </div>
+
+      <!-- FORM A -->
+      <div id="screen-formA" class="screen">
+        <div class="section-hd"><span class="badge badge-a">Form A</span><h2>Baseline enrollment</h2></div>
+        <div class="editing-banner" id="edit-banner-a">✏️ Editing mode — changes will update existing record</div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="prog-a" style="width:0%"></div></div>
+          <div class="progress-label" id="prog-a-label">0 of 10 required fields</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Patient identity</div>
+          <div class="field">
+            <label>Full name <span class="req">*</span></label>
+            <input type="text" id="a_name" placeholder="Patient full name" oninput="calcProgA()">
+          </div>
+          <div class="field">
+            <label>Mobile number <span class="req">*</span></label>
+            <input type="tel" id="a_phone" placeholder="e.g. 07901234567" oninput="calcProgA()">
+          </div>
+          <div class="field">
+            <label>Site <span class="req">*</span></label>
+            <select id="a_site" onchange="toggleOtherSite(); calcProgA()">
+              <option value="">Select center</option>
+              <option>مستشفى الامل الوطني لعلاج الاورام</option>
+              <option>مستشفى الاورام التعليمي</option>
+              <option>مركز الجواد لعلاج الاورام</option>
+              <option>مستشفى اليرموك — مركز علاج الاورام</option>
+              <option>مركز النجف لعلاج الاورام</option>
+              <option>مركز كربلاء لعلاج الاورام</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="cond" id="other-site-cond">
+            <div class="field">
+              <label>Center name <span class="req">*</span></label>
+              <input type="text" id="a_site_other" placeholder="اكتب اسم المركز" oninput="calcProgA()">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Sex <span class="req">*</span></label>
+              <select id="a_sex" onchange="calcProgA()">
+                <option value="">Select</option>
+                <option>Female</option><option>Male</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Year of birth <span class="req">*</span></label>
+              <input type="number" id="a_yob" placeholder="1975" min="1930" max="2010" oninput="calcProgA()">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Metastatic Dx date <span class="req">*</span></label>
+              <input type="date" id="a_metdate" onchange="calcProgA()">
+            </div>
+            <div class="field">
+              <label>T-DXd cycle 1 date <span class="req">*</span></label>
+              <input type="date" id="a_startdate" onchange="calcProgA()">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Tumor biology</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Histology <span class="req">*</span></label>
+              <select id="a_hist" onchange="calcProgA()">
+                <option value="">Select</option>
+                <option>IDC</option><option>ILC</option><option>Mixed</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>HR status <span class="req">*</span></label>
+              <select id="a_hr" onchange="calcProgA()">
+                <option value="">Select</option>
+                <option>ER+ PR+</option><option>ER+ PR-</option><option>ER- PR+</option><option>ER- PR-</option><option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>HER2 IHC <span class="req">*</span></label>
+              <select id="a_her2ihc" onchange="calcProgA()">
+                <option value="">Select</option>
+                <option>1+</option><option>2+</option><option>3+</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>HER2 FISH</label>
+              <select id="a_fish">
+                <option value="">Select</option>
+                <option>Amplified</option><option>Not amplified</option><option>Not tested</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Ki-67 (%)</label>
+              <input type="number" id="a_ki67" min="0" max="100">
+            </div>
+            <div class="field">
+              <label>Grade</label>
+              <select id="a_grade">
+                <option value="">Select</option>
+                <option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Not reported</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>BRCA status</label>
+              <select id="a_brca">
+                <option value="">Select</option>
+                <option>Mutated</option><option>Wildtype</option><option>Not tested</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Laterality</label>
+              <select id="a_lateral">
+                <option value="">Select</option>
+                <option>Left</option><option>Right</option><option>Bilateral</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Metastatic disease</div>
+          <div class="field">
+            <label>Sites of metastasis <span class="req">*</span></label>
+            <div class="check-group">
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Bone"> Bone</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Liver"> Liver</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Lung"> Lung</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Brain"> Brain</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Lymph nodes"> LN</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Skin"> Skin</label>
+              <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="mets" value="Other"> Other</label>
+            </div>
+          </div>
+          <div class="field-row" style="margin-top:12px">
+            <div class="field">
+              <label>Visceral crisis <span class="req">*</span></label>
+              <select id="a_vc" onchange="calcProgA()">
+                <option value="">Select</option><option>Yes</option><option>No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>No. of met sites</label>
+              <input type="number" id="a_nsites" min="1" max="10">
+            </div>
+          </div>
+          <div class="field">
+            <label>CNS status <span class="req">*</span></label>
+            <select id="a_cns" onchange="showCond('cns-cond',this.value&&this.value!=='No brain mets');calcProgA()">
+              <option value="">Select</option>
+              <option>No brain mets</option>
+              <option>Active brain mets</option>
+              <option>Stable treated brain mets</option>
+            </select>
+          </div>
+          <div class="cond" id="cns-cond">
+            <div class="field-row">
+              <div class="field"><label>No. of lesions</label><input type="number" id="a_cnsnl" min="1"></div>
+              <div class="field"><label>Largest diam. (mm)</label><input type="number" id="a_cnsdiam" min="1"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Prior SRS</label><select id="a_srs"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+              <div class="field"><label>Prior WBRT</label><select id="a_wbrt"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Prior therapies</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Prior lines (met.) <span class="req">*</span></label>
+              <input type="number" id="a_lines" min="0" max="20" oninput="calcProgA()">
+            </div>
+            <div class="field">
+              <label>Prior trastuzumab <span class="req">*</span></label>
+              <select id="a_tras" onchange="calcProgA()">
+                <option value="">Select</option><option>Yes</option><option>No</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Prior pertuzumab</label>
+              <select id="a_pert"><option value="">Select</option><option>Yes</option><option>No</option></select>
+            </div>
+            <div class="field">
+              <label>Prior T-DM1 <span class="req">*</span></label>
+              <select id="a_tdm1" onchange="calcProgA()">
+                <option value="">Select</option><option>Yes</option><option>No</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Prior tucatinib</label>
+              <select id="a_tuca"><option value="">Select</option><option>Yes</option><option>No</option></select>
+            </div>
+            <div class="field">
+              <label>Prior anthracycline</label>
+              <select id="a_anthra"><option value="">Select</option><option>Yes</option><option>No</option></select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Prior CDK4/6i (HR+)</label>
+              <select id="a_cdk"><option value="">Select</option><option>Yes</option><option>No</option><option>N/A</option></select>
+            </div>
+            <div class="field">
+              <label>Last prior therapy date</label>
+              <input type="date" id="a_lastdate">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Baseline clinical</div>
+          <div class="field-row">
+            <div class="field">
+              <label>ECOG PS <span class="req">*</span></label>
+              <select id="a_ecog" onchange="calcProgA()">
+                <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Charlson score (CCI)</label>
+              <input type="number" id="a_cci" min="0" max="30">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Smoking history</label>
+              <select id="a_smoke">
+                <option value="">Select</option><option>Never</option><option>Former</option><option>Current</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Baseline LVEF (%)</label>
+              <input type="number" id="a_lvef" min="15" max="85">
+            </div>
+          </div>
+          <div class="field">
+            <label>Prior lung disease</label>
+            <select id="a_lung" onchange="showCond('lung-cond',this.value&&this.value!=='None')">
+              <option value="">Select</option>
+              <option>None</option><option>COPD</option><option>Prior ILD</option><option>Asthma</option><option>Other</option>
+            </select>
+          </div>
+          <div class="cond" id="lung-cond">
+            <div class="field">
+              <label>Lung disease severity</label>
+              <select id="a_lungsev"><option value="">Select</option><option>Mild</option><option>Moderate</option><option>Severe</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Baseline HRCT available</label>
+            <select id="a_hrct" onchange="showCond('hrct-cond',this.value==='Yes')">
+              <option value="">Select</option><option>Yes</option><option>No</option>
+            </select>
+          </div>
+          <div class="cond" id="hrct-cond">
+            <div class="field-row">
+              <div class="field">
+                <label>HRCT findings</label>
+                <select id="a_hrctf">
+                  <option value="">Select</option>
+                  <option>Normal</option><option>Ground-glass opacities</option><option>Fibrosis</option><option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>DLCO (% pred.)</label>
+                <input type="number" id="a_dlco" min="10" max="150">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="save-a-btn" onclick="saveA()">💾 Save patient record</button>
+        <button class="btn btn-ghost" onclick="clearA()">Clear form</button>
+      </div>
+
+      <!-- FORM B -->
+      <div id="screen-formB" class="screen">
+        <div class="section-hd"><span class="badge badge-b">Form B</span><h2>Cycle follow-up</h2></div>
+
+        <div class="card">
+          <div class="card-title">Link to patient</div>
+          <div class="field">
+            <label>Patient <span class="req">*</span></label>
+            <select id="b_pid" onchange="loadCtxB()">
+              <option value="">Select enrolled patient</option>
+            </select>
+          </div>
+          <div id="b_ctx" class="info-row" style="display:none"></div>
+          <div class="field-row">
+            <div class="field">
+              <label>Cycle no. <span class="req">*</span></label>
+              <input type="number" id="b_cycle" min="1" max="50" placeholder="1">
+            </div>
+            <div class="field">
+              <label>Cycle date <span class="req">*</span></label>
+              <input type="date" id="b_date">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Dose & ECOG</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Planned dose (mg/kg)</label>
+              <input type="number" id="b_dosep" step="0.1" placeholder="5.4">
+            </div>
+            <div class="field">
+              <label>Actual dose (mg/kg) <span class="req">*</span></label>
+              <input type="number" id="b_dosea" step="0.1" placeholder="5.4">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Dose modification</label>
+              <select id="b_dmod" onchange="showCond('dmod-cond',this.value&&this.value!=='None')">
+                <option value="">Select</option><option>None</option><option>Reduction</option><option>Delay</option><option>Omission</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>ECOG this cycle <span class="req">*</span></label>
+              <select id="b_ecog">
+                <option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option>
+              </select>
+            </div>
+          </div>
+          <div class="cond" id="dmod-cond">
+            <div class="field">
+              <label>Reason for modification</label>
+              <select id="b_dmod_r">
+                <option value="">Select</option>
+                <option>ILD/pneumonitis</option><option>Nausea/vomiting</option><option>Thrombocytopenia</option>
+                <option>Neutropenia</option><option>Neuropathy</option><option>Fatigue</option><option>Other toxicity</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Response — RECIST 1.1</div>
+          <div class="field">
+            <label>Imaging performed</label>
+            <select id="b_img" onchange="showCond('img-cond',this.value==='Yes')">
+              <option value="">Select</option><option>Yes</option><option>No</option>
+            </select>
+          </div>
+          <div class="cond" id="img-cond">
+            <div class="field-row">
+              <div class="field"><label>Imaging date</label><input type="date" id="b_imgdate"></div>
+              <div class="field"><label>Modality</label><select id="b_mod"><option value="">Select</option><option>CT CAP</option><option>PET-CT</option><option>MRI</option></select></div>
+            </div>
+            <div class="field">
+              <label>RECIST 1.1 response <span class="req">*</span></label>
+              <select id="b_recist">
+                <option value="">Select</option>
+                <option>CR — complete response</option><option>PR — partial response</option>
+                <option>SD — stable disease</option><option>PD — progressive disease</option>
+                <option>NE — not evaluable</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Sum of target lesions (mm)</label><input type="number" id="b_sumd" min="0"></div>
+              <div class="field"><label>New lesion</label><select id="b_newl"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+            </div>
+          </div>
+          <div class="field">
+            <label>CNS imaging</label>
+            <select id="b_cnsimg" onchange="showCond('cnsimg-cond',this.value==='Yes')">
+              <option value="">Select</option><option>Yes</option><option>No</option><option>N/A</option>
+            </select>
+          </div>
+          <div class="cond" id="cnsimg-cond">
+            <div class="field-row">
+              <div class="field"><label>CNS response (RANO-BM)</label><select id="b_cnsr"><option value="">Select</option><option>CR</option><option>PR</option><option>SD</option><option>PD</option></select></div>
+              <div class="field"><label>Largest CNS lesion (mm)</label><input type="number" id="b_cnsd" min="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Toxicity — CTCAE v5.0</div>
+          <div id="ctcae-container"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">ILD / pneumonitis module</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Respiratory symptoms</label>
+              <select id="b_resp" onchange="showCond('ild-cond',this.value==='Yes')">
+                <option value="">Select</option><option>Yes</option><option>No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>SpO2 at visit (%)</label>
+              <input type="number" id="b_spo2" min="50" max="100">
+            </div>
+          </div>
+          <div class="cond" id="ild-cond">
+            <div class="field">
+              <label>Symptom type</label>
+              <div class="check-group">
+                <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="ildsx" value="Cough"> Cough</label>
+                <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="ildsx" value="Dyspnoea"> Dyspnoea</label>
+                <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="ildsx" value="Fever"> Fever</label>
+                <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" name="ildsx" value="Hypoxia"> Hypoxia</label>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>ILD status</label><select id="b_ildst"><option value="">Select</option><option>Suspected</option><option>Confirmed</option><option>Ruled out</option></select></div>
+              <div class="field"><label>CTCAE grade</label><select id="b_ildgr"><option value="">Select</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option></select></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>ILD onset date</label><input type="date" id="b_ildd"></div>
+              <div class="field"><label>HRCT pattern</label><select id="b_ildhx"><option value="">Select</option><option>Bilateral GGO</option><option>Unilateral GGO</option><option>Consolidation</option><option>Mixed</option><option>Normal</option></select></div>
+            </div>
+            <div class="field"><label>Management</label><select id="b_ildmg"><option value="">Select</option><option>Observation</option><option>Steroids started</option><option>T-DXd held</option><option>T-DXd permanently stopped</option></select></div>
+            <div class="field-row">
+              <div class="field"><label>Steroid dose (mg/day)</label><input type="number" id="b_ilds" min="0"></div>
+              <div class="field"><label>ILD resolution</label><select id="b_ildrx"><option value="">Select</option><option>Complete</option><option>Partial</option><option>Ongoing</option></select></div>
+            </div>
+            <div class="field"><label>Rechallenge after ILD</label><select id="b_ildrch"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Mandatory labs</div>
+          <div class="field-row">
+            <div class="field"><label>WBC (×10³/μL)</label><input type="number" id="b_wbc" step="0.1" min="0"></div>
+            <div class="field"><label>ANC (×10³/μL)</label><input type="number" id="b_anc" step="0.1" min="0"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Platelets (×10³/μL)</label><input type="number" id="b_plt" min="0"></div>
+            <div class="field"><label>Hgb (g/dL)</label><input type="number" id="b_hgb" step="0.1" min="0"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>ALT (U/L)</label><input type="number" id="b_alt" min="0"></div>
+            <div class="field"><label>AST (U/L)</label><input type="number" id="b_ast" min="0"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Bilirubin (mg/dL)</label><input type="number" id="b_tbili" step="0.1" min="0"></div>
+            <div class="field"><label>Creatinine (mg/dL)</label><input type="number" id="b_creat" step="0.1" min="0"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveB()">💾 Save cycle record</button>
+        <button class="btn btn-ghost" onclick="clearB()">Clear form</button>
+      </div>
+
+      <!-- FORM C -->
+      <div id="screen-formC" class="screen">
+        <div class="section-hd"><span class="badge badge-c">Form C</span><h2>EOT & Survival</h2></div>
+
+        <div class="card">
+          <div class="card-title">Link to patient</div>
+          <div class="field">
+            <label>Patient <span class="req">*</span></label>
+            <select id="c_pid"><option value="">Select enrolled patient</option></select>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Record type <span class="req">*</span></label>
+              <select id="c_type" onchange="showCond('eot-fields',this.value==='End of treatment')">
+                <option value="">Select</option>
+                <option>End of treatment</option>
+                <option>3-month follow-up</option>
+                <option>6-month follow-up</option>
+                <option>12-month follow-up</option>
+                <option>Unscheduled</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Record date <span class="req">*</span></label>
+              <input type="date" id="c_date">
+            </div>
+          </div>
+        </div>
+
+        <div class="cond show" id="eot-fields" style="border-left:none;padding-left:0">
+          <div class="card">
+            <div class="card-title">Discontinuation</div>
+            <div class="field-row">
+              <div class="field"><label>Last T-DXd dose <span class="req">*</span></label><input type="date" id="c_lastdose"></div>
+              <div class="field"><label>Total cycles</label><input type="number" id="c_totcyc" min="1"></div>
+            </div>
+            <div class="field">
+              <label>Reason for stopping <span class="req">*</span></label>
+              <select id="c_stop" onchange="showCond('stoptox-cond',this.value==='Toxicity')">
+                <option value="">Select</option>
+                <option>Progressive disease</option>
+                <option>Toxicity</option>
+                <option>Patient choice</option>
+                <option>Physician decision</option>
+                <option>Death</option>
+                <option>Lost to follow-up</option>
+                <option>Drug shortage</option>
+                <option>Ongoing treatment</option>
+              </select>
+            </div>
+            <div class="cond" id="stoptox-cond">
+              <div class="field"><label>Toxicity causing stop</label><select id="c_stoptox"><option value="">Select</option><option>ILD/pneumonitis</option><option>Nausea/vomiting</option><option>Thrombocytopenia</option><option>Neutropenia</option><option>Cardiac</option><option>Neuropathy</option><option>Other</option></select></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Final efficacy</div>
+            <div class="field">
+              <label>Best overall response (RECIST 1.1) <span class="req">*</span></label>
+              <select id="c_bor">
+                <option value="">Select</option>
+                <option>CR — complete response</option><option>PR — partial response</option>
+                <option>SD — stable disease</option><option>PD — progressive disease</option><option>NE — not evaluable</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Date of first response</label><input type="date" id="c_rdate"></div>
+              <div class="field"><label>Date of progression</label><input type="date" id="c_pddate"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Progression confirmed by</label><select id="c_pdconf"><option value="">Select</option><option>Imaging</option><option>Clinical</option><option>Both</option></select></div>
+              <div class="field"><label>Pattern of progression</label><select id="c_pdpat"><option value="">Select</option><option>New lesion</option><option>Target growth</option><option>Non-target PD</option><option>CNS only</option><option>Systemic + CNS</option></select></div>
+            </div>
+            <div class="field"><label>ILD status at EOT</label><select id="c_ildeot"><option value="">Select</option><option>Complete resolution</option><option>Partial resolution</option><option>Ongoing</option><option>No ILD occurred</option></select></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Post-progression therapy</div>
+            <div class="field">
+              <label>Next line started</label>
+              <select id="c_nxtline" onchange="showCond('nxtline-cond',this.value==='Yes')">
+                <option value="">Select</option><option>Yes</option><option>No</option><option>No progression yet</option>
+              </select>
+            </div>
+            <div class="cond" id="nxtline-cond">
+              <div class="field-row">
+                <div class="field"><label>Agent / regimen</label><input type="text" id="c_nxtagent" placeholder="e.g. lapatinib + cape"></div>
+                <div class="field"><label>Start date</label><input type="date" id="c_nxtdate"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Survival status</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Status <span class="req">*</span></label>
+              <select id="c_surv" onchange="showCond('death-cond',this.value==='Deceased')">
+                <option value="">Select</option><option>Alive</option><option>Deceased</option><option>Lost to follow-up</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>ECOG at last contact</label>
+              <select id="c_ecog"><option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+            </div>
+          </div>
+          <div class="cond" id="death-cond">
+            <div class="field-row">
+              <div class="field"><label>Date of death</label><input type="date" id="c_dod"></div>
+              <div class="field"><label>Cause of death</label><select id="c_cod"><option value="">Select</option><option>Cancer progression</option><option>ILD toxicity</option><option>Other toxicity</option><option>Non-cancer</option><option>Unknown</option></select></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="saveC()">💾 Save EOT record</button>
+        <button class="btn btn-ghost" onclick="clearC()">Clear form</button>
+      </div>
+
+      <!-- ALL PATIENTS -->
+      <div id="screen-patients" class="screen">
+        <div class="section-hd"><h2>All patients</h2></div>
+        <button class="btn btn-export" onclick="exportExcel()">📊 Export all to Excel (3 sheets)</button>
+        <div id="all-pts"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="goTo('dash')" id="nav-dash"><span class="nav-icon">⊞</span><span class="nav-label">Home</span></div>
+    <div class="nav-item" onclick="startNewA()" id="nav-formA"><span class="nav-icon">＋</span><span class="nav-label">Form A</span></div>
+    <div class="nav-item" onclick="goTo('formB')" id="nav-formB"><span class="nav-icon">↺</span><span class="nav-label">Form B</span></div>
+    <div class="nav-item" onclick="goTo('formC')" id="nav-formC"><span class="nav-icon">⚑</span><span class="nav-label">Form C</span></div>
+    <div class="nav-item" onclick="goTo('patients')" id="nav-patients"><span class="nav-icon">☰</span><span class="nav-label">Patients</span></div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirm-title">Are you sure?</div>
+    <div class="confirm-msg" id="confirm-msg">This action cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" style="flex:1;margin:0" id="confirm-ok-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="config-modal" id="config-modal">
+  <div class="config-box">
+    <div class="config-title">⚙️ Settings</div>
+    <div class="config-sub">Update your doctor name or Firebase config</div>
+    <div class="setup-field">
+      <label>Your Name (Doctor)</label>
+      <input type="text" id="modal_doctor" placeholder="Dr. Name">
+    </div>
+    <div style="margin-top:8px; display:flex; gap:8px;">
+      <button class="btn btn-primary" style="flex:1" onclick="saveModalConfig()">Save</button>
+      <button class="btn btn-ghost" style="flex:1;margin:0" onclick="closeConfigModal()">Cancel</button>
+    </div>
+    <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+      <button class="btn btn-danger" onclick="resetConfig()" style="margin:0">🔄 Reset Firebase Config</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── CONFIG ───────────────────────────────────────────────────
+let db = null;
+let DOCTOR = '';
+let unsubscribers = [];
+
+const DB = { patients: [], cycles: [], eot: [] };
+
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem('tdxd_fbcfg') || 'null'); } catch { return null; }
+}
+
+function initFirebase(cfg) {
+  try {
+    const app = initializeApp(cfg);
+    db = getFirestore(app);
+    return true;
+  } catch(e) {
+    console.error('Firebase init error:', e);
+    return false;
+  }
+}
+
+function startListeners() {
+  unsubscribers.forEach(u => u());
+  unsubscribers = [];
+
+  const cols = [
+    { name: 'patients', key: 'patients' },
+    { name: 'cycles', key: 'cycles' },
+    { name: 'eot', key: 'eot' }
+  ];
+
+  cols.forEach(({ name, key }) => {
+    const q = query(collection(db, name), orderBy('savedAt', 'desc'));
+    const unsub = onSnapshot(q, snap => {
+      DB[key] = snap.docs.map(d => ({ ...d.data(), _fbId: d.id }));
+      updateDash();
+      if (currentScreen === 'patients') renderPatients();
+      if (currentScreen === 'formB' || currentScreen === 'formC') fillDropdowns();
+      setSynced();
+    }, err => {
+      console.error('Listener error:', err);
+    });
+    unsubscribers.push(unsub);
+  });
+}
+
+function setSyncing() {
+  const f = document.getElementById('sync-fill');
+  f.className = 'sync-bar-fill syncing';
+}
+function setSynced() {
+  const f = document.getElementById('sync-fill');
+  f.className = 'sync-bar-fill synced';
+  setTimeout(() => f.className = 'sync-bar-fill', 2000);
+}
+
+// ── SETUP ────────────────────────────────────────────────────
+window.saveConfig = function() {
+  const apiKey = document.getElementById('cfg_apiKey').value.trim();
+  const projectId = document.getElementById('cfg_projectId').value.trim();
+  const appId = document.getElementById('cfg_appId').value.trim();
+  const authDomain = document.getElementById('cfg_authDomain').value.trim() || projectId + '.firebaseapp.com';
+  const doctor = document.getElementById('cfg_doctor').value.trim();
+
+  if (!apiKey || !projectId || !appId || !doctor) {
+    alert('Please fill in API Key, Project ID, App ID, and your name.');
+    return;
+  }
+
+  const cfg = { apiKey, authDomain, projectId, storageBucket: projectId + '.appspot.com', appId };
+  localStorage.setItem('tdxd_fbcfg', JSON.stringify(cfg));
+  localStorage.setItem('tdxd_doctor', doctor);
+
+  if (initFirebase(cfg)) {
+    DOCTOR = doctor;
+    document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + doctor;
+    document.getElementById('setup-screen').classList.add('hidden');
+    startListeners();
+    toast('Connected to Firebase ✓', 'success');
+  } else {
+    alert('Firebase connection failed. Please check your config values.');
+  }
+};
+
+window.showConfigModal = function() {
+  document.getElementById('modal_doctor').value = localStorage.getItem('tdxd_doctor') || '';
+  document.getElementById('config-modal').classList.add('show');
+};
+window.closeConfigModal = function() {
+  document.getElementById('config-modal').classList.remove('show');
+};
+window.saveModalConfig = function() {
+  const d = document.getElementById('modal_doctor').value.trim();
+  if (!d) { alert('Enter your name'); return; }
+  DOCTOR = d;
+  localStorage.setItem('tdxd_doctor', d);
+  document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + d;
+  closeConfigModal();
+  toast('Name updated', 'success');
+};
+window.resetConfig = function() {
+  if (!confirm('This will disconnect Firebase and reset the app config. Continue?')) return;
+  localStorage.removeItem('tdxd_fbcfg');
+  localStorage.removeItem('tdxd_doctor');
+  location.reload();
+};
+
+// ── ONLINE/OFFLINE ───────────────────────────────────────────
+window.addEventListener('offline', () => document.getElementById('offline-banner').classList.add('show'));
+window.addEventListener('online', () => document.getElementById('offline-banner').classList.remove('show'));
+
+// ── CTCAE ────────────────────────────────────────────────────
+const ctcaeItems = ['Nausea','Vomiting','Diarrhoea','Fatigue','Alopecia','Thrombocytopenia','Neutropenia','Anaemia','ALT elevation','AST elevation','Peripheral neuropathy','Stomatitis'];
+const ctcaeState = {};
+window.buildCTCAE = function() {
+  const c = document.getElementById('ctcae-container');
+  c.innerHTML = '';
+  ctcaeItems.forEach(item => {
+    ctcaeState[item] = null;
+    const d = document.createElement('div');
+    d.className = 'ctcae-item';
+    d.innerHTML = `<div class="ctcae-label">${item}</div><div class="grade-row">${[0,1,2,3,4,5].map(n=>`<button type="button" class="grade-btn g${n}" onclick="pickGrade('${item}',${n},this)">${n}</button>`).join('')}</div>`;
+    c.appendChild(d);
+  });
+};
+window.pickGrade = function(item, n, btn) {
+  ctcaeState[item] = n;
+  btn.closest('.grade-row').querySelectorAll('.grade-btn').forEach(b => {
+    b.className = `grade-btn g${b.textContent}`;
+    if (parseInt(b.textContent) === n) b.classList.add('sel');
+  });
+};
+
+// ── UI HELPERS ───────────────────────────────────────────────
+window.showCond = function(id, show) { document.getElementById(id)?.classList.toggle('show', !!show); };
+window.toggleOtherSite = function() { showCond('other-site-cond', document.getElementById('a_site').value === 'Other'); };
+function getSiteValue() { const s = document.getElementById('a_site').value; return s === 'Other' ? (document.getElementById('a_site_other').value.trim()||'Other') : s; }
+window.toggleCheck = function(label) { const cb = label.querySelector('input'); setTimeout(() => label.classList.toggle('checked', cb.checked), 0); };
+function getChecked(name) { return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c=>c.value).join(', '); }
+function setChecked(name, csv) {
+  const vals = csv ? csv.split(', ') : [];
+  document.querySelectorAll(`input[name="${name}"]`).forEach(cb => {
+    cb.checked = vals.includes(cb.value);
+    cb.closest('.check-item').classList.toggle('checked', cb.checked);
+  });
+}
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type||'success');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className = 'toast', 2800);
+}
+
+let confirmCallback = null;
+window.showConfirm = function(icon, title, msg, btnLabel, cb) {
+  document.getElementById('confirm-icon').textContent = icon;
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  document.getElementById('confirm-ok-btn').textContent = btnLabel;
+  confirmCallback = cb;
+  document.getElementById('confirm-overlay').classList.add('show');
+};
+window.closeConfirm = function() { document.getElementById('confirm-overlay').classList.remove('show'); confirmCallback = null; };
+document.getElementById('confirm-ok-btn').onclick = () => { if (confirmCallback) confirmCallback(); closeConfirm(); };
+
+// ── NAVIGATION ───────────────────────────────────────────────
+let editingPatientId = null;
+let currentScreen = 'dash';
+
+window.goTo = function(id) {
+  currentScreen = id;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + id)?.classList.add('active');
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  const titles = { dash: ['T-DXd Study','Iraqi Multicenter Cohort'], formA: ['Form A','Baseline enrollment'], formB: ['Form B','Cycle follow-up'], formC: ['Form C','EOT & Survival'], patients: ['All patients',''] };
+  const t = titles[id] || ['T-DXd Study',''];
+  document.getElementById('hdr-title').textContent = t[0];
+  document.getElementById('hdr-sub').textContent = t[1];
+  document.getElementById('hdr-back').classList.toggle('visible', id !== 'dash');
+  if (id === 'dash') updateDash();
+  if (id === 'formB' || id === 'formC') fillDropdowns();
+  if (id === 'patients') renderPatients();
+  document.querySelector('.content').scrollTo(0, 0);
+};
+window.goBack = function() { goTo('dash'); };
+window.startNewA = function() { editingPatientId = null; clearA(); goTo('formA'); };
+
+// ── PROGRESS ─────────────────────────────────────────────────
+window.calcProgA = function() {
+  const reqs = ['a_name','a_phone','a_site','a_sex','a_yob','a_metdate','a_startdate','a_hist','a_hr','a_her2ihc'];
+  const filled = reqs.filter(id => { const el = document.getElementById(id); return el && el.value && el.value.trim() !== ''; }).length;
+  const pct = Math.round(filled / reqs.length * 100);
+  document.getElementById('prog-a').style.width = pct + '%';
+  document.getElementById('prog-a-label').textContent = `${filled} of ${reqs.length} required fields complete`;
+};
+
+// ── COLLECT FORM A ────────────────────────────────────────────
+function collectA() {
+  const s = document.getElementById('a_startdate').value;
+  const l = document.getElementById('a_lastdate').value;
+  return {
+    id: editingPatientId || Date.now().toString(),
+    name: document.getElementById('a_name').value.trim(),
+    phone: document.getElementById('a_phone').value.trim(),
+    site: getSiteValue(),
+    sex: document.getElementById('a_sex').value,
+    yob: document.getElementById('a_yob').value,
+    metDate: document.getElementById('a_metdate').value,
+    startDate: s,
+    hist: document.getElementById('a_hist').value,
+    hr: document.getElementById('a_hr').value,
+    her2ihc: document.getElementById('a_her2ihc').value,
+    fish: document.getElementById('a_fish').value,
+    ki67: document.getElementById('a_ki67').value,
+    grade: document.getElementById('a_grade').value,
+    brca: document.getElementById('a_brca').value,
+    lateral: document.getElementById('a_lateral').value,
+    metSites: getChecked('mets'),
+    visceralCrisis: document.getElementById('a_vc').value,
+    nMetSites: document.getElementById('a_nsites').value,
+    cns: document.getElementById('a_cns').value,
+    cnsNL: document.getElementById('a_cnsnl')?.value||'',
+    cnsDiam: document.getElementById('a_cnsdiam')?.value||'',
+    priorLines: document.getElementById('a_lines').value,
+    tras: document.getElementById('a_tras').value,
+    pert: document.getElementById('a_pert').value,
+    tdm1: document.getElementById('a_tdm1').value,
+    tuca: document.getElementById('a_tuca').value,
+    anthra: document.getElementById('a_anthra').value,
+    cdk: document.getElementById('a_cdk').value,
+    lastTherapyDate: l,
+    timeToDXd: (s&&l) ? Math.round((new Date(s)-new Date(l))/86400000)+' days' : '',
+    ecog: document.getElementById('a_ecog').value,
+    cci: document.getElementById('a_cci').value,
+    smoke: document.getElementById('a_smoke').value,
+    lvef: document.getElementById('a_lvef').value,
+    lungDisease: document.getElementById('a_lung').value,
+    lungsev: document.getElementById('a_lungsev')?.value||'',
+    hrct: document.getElementById('a_hrct').value,
+    hrctFindings: document.getElementById('a_hrctf')?.value||'',
+    dlco: document.getElementById('a_dlco')?.value||'',
+    enteredBy: DOCTOR,
+    savedAt: new Date().toISOString()
+  };
+}
+
+// ── POPULATE FORM A ───────────────────────────────────────────
+function populateA(p) {
+  document.getElementById('a_name').value = p.name||'';
+  document.getElementById('a_phone').value = p.phone||'';
+  const knownSites = ['مستشفى الامل الوطني لعلاج الاورام','مستشفى الاورام التعليمي','مركز الجواد لعلاج الاورام','مستشفى اليرموك — مركز علاج الاورام','مركز النجف لعلاج الاورام','مركز كربلاء لعلاج الاورام','Other',''];
+  if (knownSites.includes(p.site||'')) { document.getElementById('a_site').value = p.site||''; } else { document.getElementById('a_site').value = 'Other'; document.getElementById('a_site_other').value = p.site||''; showCond('other-site-cond', true); }
+  document.getElementById('a_sex').value = p.sex||'';
+  document.getElementById('a_yob').value = p.yob||'';
+  document.getElementById('a_metdate').value = p.metDate||'';
+  document.getElementById('a_startdate').value = p.startDate||'';
+  document.getElementById('a_hist').value = p.hist||'';
+  document.getElementById('a_hr').value = p.hr||'';
+  document.getElementById('a_her2ihc').value = p.her2ihc||'';
+  document.getElementById('a_fish').value = p.fish||'';
+  document.getElementById('a_ki67').value = p.ki67||'';
+  document.getElementById('a_grade').value = p.grade||'';
+  document.getElementById('a_brca').value = p.brca||'';
+  document.getElementById('a_lateral').value = p.lateral||'';
+  document.getElementById('a_vc').value = p.visceralCrisis||'';
+  document.getElementById('a_nsites').value = p.nMetSites||'';
+  document.getElementById('a_cns').value = p.cns||'';
+  showCond('cns-cond', p.cns && p.cns !== 'No brain mets');
+  document.getElementById('a_cnsnl').value = p.cnsNL||'';
+  document.getElementById('a_cnsdiam').value = p.cnsDiam||'';
+  document.getElementById('a_lines').value = p.priorLines||'';
+  document.getElementById('a_tras').value = p.tras||'';
+  document.getElementById('a_pert').value = p.pert||'';
+  document.getElementById('a_tdm1').value = p.tdm1||'';
+  document.getElementById('a_tuca').value = p.tuca||'';
+  document.getElementById('a_anthra').value = p.anthra||'';
+  document.getElementById('a_cdk').value = p.cdk||'';
+  document.getElementById('a_lastdate').value = p.lastTherapyDate||'';
+  document.getElementById('a_ecog').value = p.ecog||'';
+  document.getElementById('a_cci').value = p.cci||'';
+  document.getElementById('a_smoke').value = p.smoke||'';
+  document.getElementById('a_lvef').value = p.lvef||'';
+  document.getElementById('a_lung').value = p.lungDisease||'';
+  showCond('lung-cond', p.lungDisease && p.lungDisease !== 'None');
+  document.getElementById('a_lungsev').value = p.lungsev||'';
+  document.getElementById('a_hrct').value = p.hrct||'';
+  showCond('hrct-cond', p.hrct === 'Yes');
+  document.getElementById('a_hrctf').value = p.hrctFindings||'';
+  document.getElementById('a_dlco').value = p.dlco||'';
+  setChecked('mets', p.metSites||'');
+  calcProgA();
+}
+
+// ── SAVE A ───────────────────────────────────────────────────
+window.saveA = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
+  const name = document.getElementById('a_name').value.trim();
+  const site = document.getElementById('a_site').value;
+  if (!name || !site) { toast('Name and site are required', 'error'); return; }
+  const rec = collectA();
+  setSyncing();
+  try {
+    if (editingPatientId) {
+      const existing = DB.patients.find(p => p.id === editingPatientId);
+      if (existing?._fbId) {
+        await setDoc(doc(db, 'patients', existing._fbId), rec);
+        toast('Record updated for ' + name);
+      }
+    } else {
+      await addDoc(collection(db, 'patients'), rec);
+      toast('Patient saved: ' + name);
+    }
+    editingPatientId = null;
+    clearA();
+    goTo('dash');
+  } catch(e) {
+    toast('Save failed: ' + e.message, 'error');
+  }
+};
+
+window.clearA = function() {
+  document.querySelectorAll('#screen-formA input, #screen-formA select').forEach(el => {
+    if (el.type === 'checkbox') el.checked = false; else el.value = '';
+  });
+  document.querySelectorAll('#screen-formA .check-item').forEach(l => l.classList.remove('checked'));
+  ['cns-cond','lung-cond','hrct-cond','other-site-cond'].forEach(id => showCond(id, false));
+  document.getElementById('edit-banner-a').classList.remove('show');
+  document.getElementById('save-a-btn').textContent = '💾 Save patient record';
+  editingPatientId = null;
+  calcProgA();
+};
+
+window.editPatient = function(id) {
+  const p = DB.patients.find(x => x.id === id);
+  if (!p) return;
+  editingPatientId = id;
+  goTo('formA');
+  setTimeout(() => {
+    populateA(p);
+    document.getElementById('edit-banner-a').classList.add('show');
+    document.getElementById('save-a-btn').textContent = '✅ Update patient record';
+    document.querySelector('.content').scrollTo(0, 0);
+  }, 50);
+};
+
+window.deletePatient = function(id) {
+  const p = DB.patients.find(x => x.id === id);
+  if (!p) return;
+  showConfirm('🗑️', 'Delete patient?', `This will permanently delete ${p.name} and all their records from the shared database.`, 'Delete', async () => {
+    setSyncing();
+    try {
+      if (p._fbId) await deleteDoc(doc(db, 'patients', p._fbId));
+      // delete related cycles and eot
+      for (const c of DB.cycles.filter(x => x.pid === id)) {
+        if (c._fbId) await deleteDoc(doc(db, 'cycles', c._fbId));
+      }
+      for (const e of DB.eot.filter(x => x.pid === id)) {
+        if (e._fbId) await deleteDoc(doc(db, 'eot', e._fbId));
+      }
+      toast('Patient deleted');
+    } catch(e) { toast('Delete failed: ' + e.message, 'error'); }
+  });
+};
+
+// ── FORM B ───────────────────────────────────────────────────
+window.fillDropdowns = function() {
+  ['b_pid','c_pid'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Select enrolled patient</option>';
+    DB.patients.forEach(p => {
+      const o = document.createElement('option');
+      o.value = p.id;
+      o.textContent = p.name + ' — ' + (p.site||'').split(' — ')[0];
+      sel.appendChild(o);
+    });
+    if (cur) sel.value = cur;
+  });
+};
+
+window.loadCtxB = function() {
+  const pid = document.getElementById('b_pid').value;
+  const ctx = document.getElementById('b_ctx');
+  if (!pid) { ctx.style.display = 'none'; return; }
+  const p = DB.patients.find(x => x.id === pid);
+  if (!p) return;
+  const prev = DB.cycles.filter(c => c.pid === pid).length;
+  ctx.style.display = 'flex';
+  ctx.innerHTML = `📋 ${p.name} &nbsp;|&nbsp; HER2 ${p.her2ihc} &nbsp;|&nbsp; ${p.hr} &nbsp;|&nbsp; ECOG ${p.ecog} &nbsp;|&nbsp; Cycles: ${prev} &nbsp;|&nbsp; Entered by: ${p.enteredBy||'—'}`;
+};
+
+window.saveB = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
+  const pid = document.getElementById('b_pid').value;
+  const cycle = document.getElementById('b_cycle').value;
+  if (!pid || !cycle) { toast('Patient and cycle no. are required', 'error'); return; }
+  const hasILD = document.getElementById('b_resp').value === 'Yes' && document.getElementById('b_ildst').value !== 'Ruled out';
+  setSyncing();
+  try {
+    await addDoc(collection(db, 'cycles'), {
+      pid, cycle: parseInt(cycle), date: document.getElementById('b_date').value,
+      dosePlanned: document.getElementById('b_dosep').value, doseActual: document.getElementById('b_dosea').value,
+      doseMod: document.getElementById('b_dmod').value, doseModReason: document.getElementById('b_dmod_r').value,
+      ecog: document.getElementById('b_ecog').value,
+      imaging: document.getElementById('b_img').value, imgDate: document.getElementById('b_imgdate').value,
+      modality: document.getElementById('b_mod').value, recist: document.getElementById('b_recist').value,
+      sumDiam: document.getElementById('b_sumd').value, newLesion: document.getElementById('b_newl').value,
+      cnsImaging: document.getElementById('b_cnsimg').value, cnsResponse: document.getElementById('b_cnsr').value, cnsDiam: document.getElementById('b_cnsd').value,
+      respSympt: document.getElementById('b_resp').value, spo2: document.getElementById('b_spo2').value,
+      ildSx: getChecked('ildsx'), ildStatus: document.getElementById('b_ildst').value,
+      ildGrade: document.getElementById('b_ildgr').value, ildDate: document.getElementById('b_ildd').value,
+      ildHRCT: document.getElementById('b_ildhx').value, ildMgmt: document.getElementById('b_ildmg').value,
+      ildSteroid: document.getElementById('b_ilds').value, ildResolved: document.getElementById('b_ildrx').value,
+      ildRechallenge: document.getElementById('b_ildrch').value,
+      ...Object.fromEntries(Object.entries(ctcaeState).map(([k,v])=>['CTCAE_'+k, v!==null?v:''])),
+      wbc: document.getElementById('b_wbc').value, anc: document.getElementById('b_anc').value,
+      plt: document.getElementById('b_plt').value, hgb: document.getElementById('b_hgb').value,
+      alt: document.getElementById('b_alt').value, ast: document.getElementById('b_ast').value,
+      tbili: document.getElementById('b_tbili').value, creat: document.getElementById('b_creat').value,
+      hasILD, enteredBy: DOCTOR, savedAt: new Date().toISOString()
+    });
+    const p = DB.patients.find(x => x.id === pid);
+    toast('Cycle ' + cycle + ' saved for ' + (p?.name||pid));
+    clearB();
+  } catch(e) { toast('Save failed: ' + e.message, 'error'); }
+};
+
+window.clearB = function() {
+  document.querySelectorAll('#screen-formB input, #screen-formB select').forEach(el => {
+    if (el.type === 'checkbox') el.checked = false; else el.value = '';
+  });
+  document.querySelectorAll('#screen-formB .check-item').forEach(l => l.classList.remove('checked'));
+  ['dmod-cond','img-cond','cnsimg-cond','ild-cond'].forEach(id => showCond(id, false));
+  document.getElementById('b_ctx').style.display = 'none';
+  buildCTCAE();
+};
+
+// ── FORM C ───────────────────────────────────────────────────
+window.saveC = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
+  const pid = document.getElementById('c_pid').value;
+  const type = document.getElementById('c_type').value;
+  if (!pid || !type) { toast('Patient and record type required', 'error'); return; }
+  setSyncing();
+  try {
+    await addDoc(collection(db, 'eot'), {
+      pid, type, date: document.getElementById('c_date').value,
+      lastDose: document.getElementById('c_lastdose').value, totalCycles: document.getElementById('c_totcyc').value,
+      stopReason: document.getElementById('c_stop').value, stopTox: document.getElementById('c_stoptox').value,
+      bor: document.getElementById('c_bor').value,
+      responseDate: document.getElementById('c_rdate').value, pdDate: document.getElementById('c_pddate').value,
+      pdConfirmed: document.getElementById('c_pdconf').value, pdPattern: document.getElementById('c_pdpat').value,
+      ildAtEOT: document.getElementById('c_ildeot').value,
+      postProg: document.getElementById('c_nxtline').value, postAgent: document.getElementById('c_nxtagent').value, postDate: document.getElementById('c_nxtdate').value,
+      survival: document.getElementById('c_surv').value, ecog: document.getElementById('c_ecog').value,
+      dod: document.getElementById('c_dod').value, cod: document.getElementById('c_cod').value,
+      enteredBy: DOCTOR, savedAt: new Date().toISOString()
+    });
+    const p = DB.patients.find(x => x.id === pid);
+    toast('EOT record saved for ' + (p?.name||pid));
+    clearC();
+  } catch(e) { toast('Save failed: ' + e.message, 'error'); }
+};
+
+window.clearC = function() {
+  document.querySelectorAll('#screen-formC input, #screen-formC select').forEach(el => el.value = '');
+  ['stoptox-cond','nxtline-cond','death-cond'].forEach(id => showCond(id, false));
+};
+
+// ── DASHBOARD ────────────────────────────────────────────────
+window.updateDash = function() {
+  document.getElementById('s-patients').textContent = DB.patients.length;
+  document.getElementById('s-cycles').textContent = DB.cycles.length;
+  document.getElementById('s-eot').textContent = DB.eot.length;
+  document.getElementById('s-ild').textContent = DB.cycles.filter(c=>c.hasILD).length;
+  const list = document.getElementById('recent-list');
+  const recent = [...DB.patients].slice(0,5);
+  if (!recent.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>No patients yet.<br>Tap + Form A to start.</p></div>';
+    return;
+  }
+  list.innerHTML = recent.map(p => patientRowHTML(p)).join('');
+};
+
+function patientRowHTML(p) {
+  const cyc = DB.cycles.filter(c=>c.pid===p.id).length;
+  const eotR = DB.eot.some(e=>e.pid===p.id);
+  const ild = DB.cycles.some(c=>c.pid===p.id&&c.hasILD);
+  const initials = (p.name||'?').trim().split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  return `<div class="patient-row">
+    <div class="patient-avatar">${initials}</div>
+    <div class="patient-info">
+      <div class="patient-name">${p.name}</div>
+      <div class="patient-entered-by">Entered by: ${p.enteredBy||'—'}</div>
+      <div class="patient-meta">${(p.site||'').split(' — ')[0]} &bull; HER2 ${p.her2ihc||'—'} &bull; ${p.hr||'—'} &bull; Lines: ${p.priorLines||'—'}</div>
+      <div class="patient-badges">
+        <span class="badge badge-a">A</span>
+        ${cyc>0?`<span class="badge badge-b">B×${cyc}</span>`:''}
+        ${eotR?'<span class="badge badge-c">EOT</span>':''}
+        ${ild?'<span class="badge badge-ild">ILD</span>':''}
+      </div>
+    </div>
+    <div class="patient-actions">
+      <div class="pat-action-btn" onclick="editPatient('${p.id}')" title="Edit">✏️</div>
+      <div class="pat-action-btn del" onclick="deletePatient('${p.id}')" title="Delete">🗑️</div>
+    </div>
+  </div>`;
+}
+
+window.renderPatients = function() {
+  const el = document.getElementById('all-pts');
+  if (!DB.patients.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>No patients enrolled yet</p></div>';
+    return;
+  }
+  el.innerHTML = DB.patients.map(p => patientRowHTML(p)).join('');
+};
+
+// ── EXPORT ───────────────────────────────────────────────────
+window.exportExcel = function() {
+  if (!DB.patients.length) { toast('No data to export yet', 'error'); return; }
+  const XLSX = window.XLSX;
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.patients.map(({_fbId,...r})=>r)), 'Form_A_Baseline');
+  if (DB.cycles.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.cycles.map(({_fbId,...r})=>r)), 'Form_B_Cycles');
+  if (DB.eot.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.eot.map(({_fbId,...r})=>r)), 'Form_C_EOT');
+  XLSX.writeFile(wb, 'TDXd_Study_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  toast('Excel file downloaded');
+};
+
+// ── INIT ─────────────────────────────────────────────────────
+buildCTCAE();
+
+const savedCfg = getConfig();
+const savedDoctor = localStorage.getItem('tdxd_doctor');
+if (savedCfg && savedDoctor) {
+  if (initFirebase(savedCfg)) {
+    DOCTOR = savedDoctor;
+    document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + savedDoctor;
+    document.getElementById('setup-screen').classList.add('hidden');
+    startListeners();
+  } else {
+    document.getElementById('setup-screen').classList.remove('hidden');
+  }
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
