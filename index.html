@@ -43,6 +43,38 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 .app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 
+/* SETUP SCREEN */
+.setup-screen { position: fixed; inset: 0; background: #fff; z-index: 9000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
+.setup-screen.hidden { display: none; }
+.setup-logo { font-size: 40px; margin-bottom: 12px; }
+.setup-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; letter-spacing: -0.5px; }
+.setup-sub { font-size: 14px; color: var(--text3); margin-bottom: 28px; text-align: center; font-weight: 500; line-height: 1.6; }
+.setup-form { width: 100%; max-width: 360px; }
+.setup-field { margin-bottom: 14px; }
+.setup-field label { display: block; font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+.setup-field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 15px; font-family: inherit; background: var(--bg); color: var(--text); }
+.setup-field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+.setup-note { font-size: 11px; color: var(--text3); margin-top: 5px; font-weight: 500; }
+.setup-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0; color: var(--text3); font-size: 12px; font-weight: 600; }
+.setup-divider::before, .setup-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+.setup-steps { background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px; }
+.setup-steps-title { font-size: 12px; font-weight: 800; color: var(--blue); margin-bottom: 10px; }
+.setup-step { display: flex; gap: 10px; margin-bottom: 9px; font-size: 12px; color: var(--text2); font-weight: 500; line-height: 1.4; }
+.setup-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.setup-step code { background: rgba(26,86,219,.1); color: var(--blue); padding: 1px 5px; border-radius: 4px; font-size: 11px; font-family: monospace; }
+
+/* DOCTOR BANNER */
+.doctor-banner { background: var(--blue-light); border-bottom: 1px solid var(--blue-mid); padding: 7px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.doctor-name { font-size: 12px; font-weight: 700; color: var(--blue); }
+.doctor-change { font-size: 11px; color: var(--blue); text-decoration: underline; cursor: pointer; font-weight: 600; }
+
+/* SYNC STATUS */
+.sync-bar { height: 3px; background: var(--border); flex-shrink: 0; position: relative; overflow: hidden; }
+.sync-bar-fill { position: absolute; inset: 0; background: var(--green); transform: translateX(-100%); transition: transform .4s; }
+.sync-bar-fill.syncing { animation: syncAnim 1.2s ease-in-out infinite; }
+.sync-bar-fill.synced { transform: translateX(0); }
+@keyframes syncAnim { 0%{transform:translateX(-100%)} 50%{transform:translateX(0)} 100%{transform:translateX(100%)} }
+
 /* HEADER */
 .header { flex-shrink: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px 10px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-sm); }
 .header-back { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--bg); display: none; align-items: center; justify-content: center; cursor: pointer; color: var(--text2); font-size: 20px; font-weight: 600; flex-shrink: 0; }
@@ -53,6 +85,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .header-actions { display: flex; gap: 6px; }
 .header-btn { height: 34px; padding: 0 12px; border-radius: 8px; border: 1.5px solid var(--border2); background: var(--bg); display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text2); font-size: 12px; font-weight: 600; font-family: inherit; }
 .header-btn:active { background: var(--blue-light); }
+.sync-icon { font-size: 15px; }
 
 /* CONTENT */
 .content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; background: var(--bg); }
@@ -98,7 +131,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .patient-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: var(--blue); flex-shrink: 0; }
 .patient-info { flex: 1; min-width: 0; }
 .patient-name { font-size: 14px; font-weight: 700; color: var(--text); }
-.patient-phone { font-size: 12px; color: var(--blue); font-weight: 600; margin-top: 1px; }
+.patient-entered-by { font-size: 11px; color: var(--text3); margin-top: 1px; font-weight: 500; }
 .patient-meta { font-size: 12px; color: var(--text3); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
 .patient-badges { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
 .patient-actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
@@ -123,8 +156,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .field-note { font-size: 11px; color: var(--text3); margin-top: 4px; font-weight: 500; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .field-row .field { margin-bottom: 0; }
-.field-row-wrap { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
-.field-row-wrap .field { flex: 1; min-width: 140px; margin-bottom: 0; }
 
 /* CONDITIONAL */
 .cond { border-left: 3px solid var(--blue-mid); padding-left: 14px; margin-top: 10px; margin-bottom: 4px; display: none; }
@@ -170,6 +201,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.success { border-color: #6ee7b7; color: var(--green); }
 .toast.error { border-color: #fca5a5; color: var(--red); }
+.toast.info { border-color: var(--blue-mid); color: var(--blue); }
 
 /* QUICK ACTIONS */
 .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -184,24 +216,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty p { font-size: 14px; font-weight: 500; line-height: 1.6; }
 
-/* DIVIDER */
-.divider { height: 1px; background: var(--border); margin: 14px 0; }
-
 /* SECTION HEADER */
 .section-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .section-hd h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.5px; }
 
 /* INFO ROW */
 .info-row { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 12px; color: var(--blue); font-weight: 600; line-height: 1.5; }
-
-/* MODAL OVERLAY */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1000; align-items: flex-end; justify-content: center; }
-.modal-overlay.show { display: flex; }
-.modal { background: #fff; border-radius: 20px 20px 0 0; padding: 20px 16px 32px; width: 100%; max-height: 90vh; overflow-y: auto; }
-.modal-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.modal-sub { font-size: 13px; color: var(--text3); margin-bottom: 20px; font-weight: 500; }
-.modal-btn-row { display: flex; gap: 8px; margin-top: 16px; }
-.modal-btn-row .btn { margin: 0; }
 
 /* CONFIRM DIALOG */
 .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
@@ -213,14 +233,82 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .confirm-btns { display: flex; gap: 8px; }
 .confirm-btns .btn { margin: 0; }
 
-/* EDIT HIGHLIGHT */
+/* EDITING BANNER */
 .editing-banner { background: var(--amber-bg); border: 1px solid #fcd34d; border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--amber); display: none; }
 .editing-banner.show { display: block; }
+
+/* OFFLINE BANNER */
+.offline-banner { background: #fef3c7; border-bottom: 1px solid #fcd34d; padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--amber); text-align: center; display: none; flex-shrink: 0; }
+.offline-banner.show { display: block; }
+
+/* CONFIG MODAL */
+.config-modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 5000; display: none; align-items: flex-end; justify-content: center; }
+.config-modal.show { display: flex; }
+.config-box { background: #fff; border-radius: 20px 20px 0 0; padding: 24px 20px 40px; width: 100%; max-height: 80vh; overflow-y: auto; }
+.config-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.config-sub { font-size: 13px; color: var(--text3); margin-bottom: 20px; }
 </style>
 </head>
 <body>
 
 <div class="app">
+
+  <!-- SETUP SCREEN (shown on first launch) -->
+  <div class="setup-screen" id="setup-screen">
+    <div class="setup-logo">🔬</div>
+    <div class="setup-title">T-DXd CRF Setup</div>
+    <div class="setup-sub">Connect to Firebase for real-time sync across all doctors</div>
+    <div class="setup-form">
+
+      <div class="setup-steps">
+        <div class="setup-steps-title">📋 How to get your Firebase config (5 min, free)</div>
+        <div class="setup-step"><div class="setup-step-num">1</div><div>Go to <code>console.firebase.google.com</code> → Create a new project (e.g. "TDXd-Study")</div></div>
+        <div class="setup-step"><div class="setup-step-num">2</div><div>Click <strong>Build → Firestore Database</strong> → Create database → Start in <strong>test mode</strong></div></div>
+        <div class="setup-step"><div class="setup-step-num">3</div><div>Go to <strong>Project Settings</strong> (gear icon) → <strong>Your apps</strong> → Add web app (&lt;/&gt;) → Register</div></div>
+        <div class="setup-step"><div class="setup-step-num">4</div><div>Copy the <code>firebaseConfig</code> values and paste them below</div></div>
+        <div class="setup-step"><div class="setup-step-num">5</div><div>Share the same config (or this page URL) with your colleagues — everyone connects to the same database</div></div>
+      </div>
+
+      <div class="setup-field">
+        <label>API Key <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_apiKey" placeholder="AIzaSy...">
+      </div>
+      <div class="setup-field">
+        <label>Project ID <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_projectId" placeholder="tdxd-study-xxxxx">
+      </div>
+      <div class="setup-field">
+        <label>App ID <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_appId" placeholder="1:123456789:web:abcdef...">
+      </div>
+      <div class="setup-field">
+        <label>Auth Domain</label>
+        <input type="text" id="cfg_authDomain" placeholder="tdxd-study.firebaseapp.com">
+        <div class="setup-note">Usually: [projectId].firebaseapp.com</div>
+      </div>
+
+      <div class="setup-divider">then</div>
+
+      <div class="setup-field">
+        <label>Your Name (Doctor) <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg_doctor" placeholder="e.g. Dr. Hassan Al-Bazaz">
+      </div>
+
+      <button class="btn btn-primary" onclick="saveConfig()" style="margin-top:8px">Connect to Firebase →</button>
+    </div>
+  </div>
+
+  <!-- OFFLINE BANNER -->
+  <div class="offline-banner" id="offline-banner">⚠️ Offline — changes will sync when connection is restored</div>
+
+  <!-- DOCTOR BANNER -->
+  <div class="doctor-banner" id="doctor-banner">
+    <span class="doctor-name" id="doctor-name-display">👨‍⚕️ Dr. —</span>
+    <span class="doctor-change" onclick="showConfigModal()">Change / Settings</span>
+  </div>
+
+  <!-- SYNC BAR -->
+  <div class="sync-bar"><div class="sync-bar-fill" id="sync-fill"></div></div>
 
   <!-- HEADER -->
   <div class="header">
@@ -299,7 +387,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <option value="">Select center</option>
               <option>مستشفى الامل الوطني لعلاج الاورام</option>
               <option>مستشفى الاورام التعليمي</option>
-              <option>مستشفى الامامين الجوادين — مركز الامام الجواد لعلاج الاورام</option>
+              <option>مركز الجواد لعلاج الاورام</option>
               <option>مستشفى اليرموك — مركز علاج الاورام</option>
               <option>مركز النجف لعلاج الاورام</option>
               <option>مركز كربلاء لعلاج الاورام</option>
@@ -777,8 +865,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <label>Reason for stopping <span class="req">*</span></label>
               <select id="c_stop" onchange="showCond('stoptox-cond',this.value==='Toxicity')">
                 <option value="">Select</option>
-                <option>Progressive disease</option><option>Toxicity</option><option>Patient choice</option>
-                <option>Physician decision</option><option>Death</option><option>Lost to follow-up</option><option>Ongoing treatment</option>
+                <option>Progressive disease</option>
+                <option>Toxicity</option>
+                <option>Patient choice</option>
+                <option>Physician decision</option>
+                <option>Death</option>
+                <option>Lost to follow-up</option>
+                <option>Drug shortage</option>
+                <option>Ongoing treatment</option>
               </select>
             </div>
             <div class="cond" id="stoptox-cond">
@@ -887,24 +981,146 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script>
-// ── DATA STORE ──────────────────────────────────────────────
-const DB = {
-  patients: JSON.parse(localStorage.getItem('tdxd_p')||'[]'),
-  cycles:   JSON.parse(localStorage.getItem('tdxd_c')||'[]'),
-  eot:      JSON.parse(localStorage.getItem('tdxd_e')||'[]')
+<!-- CONFIG MODAL -->
+<div class="config-modal" id="config-modal">
+  <div class="config-box">
+    <div class="config-title">⚙️ Settings</div>
+    <div class="config-sub">Update your doctor name or Firebase config</div>
+    <div class="setup-field">
+      <label>Your Name (Doctor)</label>
+      <input type="text" id="modal_doctor" placeholder="Dr. Name">
+    </div>
+    <div style="margin-top:8px; display:flex; gap:8px;">
+      <button class="btn btn-primary" style="flex:1" onclick="saveModalConfig()">Save</button>
+      <button class="btn btn-ghost" style="flex:1;margin:0" onclick="closeConfigModal()">Cancel</button>
+    </div>
+    <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+      <button class="btn btn-danger" onclick="resetConfig()" style="margin:0">🔄 Reset Firebase Config</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── CONFIG ───────────────────────────────────────────────────
+let db = null;
+let DOCTOR = '';
+let unsubscribers = [];
+
+const DB = { patients: [], cycles: [], eot: [] };
+
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem('tdxd_fbcfg') || 'null'); } catch { return null; }
+}
+
+function initFirebase(cfg) {
+  try {
+    const app = initializeApp(cfg);
+    db = getFirestore(app);
+    return true;
+  } catch(e) {
+    console.error('Firebase init error:', e);
+    return false;
+  }
+}
+
+function startListeners() {
+  unsubscribers.forEach(u => u());
+  unsubscribers = [];
+
+  const cols = [
+    { name: 'patients', key: 'patients' },
+    { name: 'cycles', key: 'cycles' },
+    { name: 'eot', key: 'eot' }
+  ];
+
+  cols.forEach(({ name, key }) => {
+    const q = query(collection(db, name), orderBy('savedAt', 'desc'));
+    const unsub = onSnapshot(q, snap => {
+      DB[key] = snap.docs.map(d => ({ ...d.data(), _fbId: d.id }));
+      updateDash();
+      if (currentScreen === 'patients') renderPatients();
+      if (currentScreen === 'formB' || currentScreen === 'formC') fillDropdowns();
+      setSynced();
+    }, err => {
+      console.error('Listener error:', err);
+    });
+    unsubscribers.push(unsub);
+  });
+}
+
+function setSyncing() {
+  const f = document.getElementById('sync-fill');
+  f.className = 'sync-bar-fill syncing';
+}
+function setSynced() {
+  const f = document.getElementById('sync-fill');
+  f.className = 'sync-bar-fill synced';
+  setTimeout(() => f.className = 'sync-bar-fill', 2000);
+}
+
+// ── SETUP ────────────────────────────────────────────────────
+window.saveConfig = function() {
+  const apiKey = document.getElementById('cfg_apiKey').value.trim();
+  const projectId = document.getElementById('cfg_projectId').value.trim();
+  const appId = document.getElementById('cfg_appId').value.trim();
+  const authDomain = document.getElementById('cfg_authDomain').value.trim() || projectId + '.firebaseapp.com';
+  const doctor = document.getElementById('cfg_doctor').value.trim();
+
+  if (!apiKey || !projectId || !appId || !doctor) {
+    alert('Please fill in API Key, Project ID, App ID, and your name.');
+    return;
+  }
+
+  const cfg = { apiKey, authDomain, projectId, storageBucket: projectId + '.appspot.com', appId };
+  localStorage.setItem('tdxd_fbcfg', JSON.stringify(cfg));
+  localStorage.setItem('tdxd_doctor', doctor);
+
+  if (initFirebase(cfg)) {
+    DOCTOR = doctor;
+    document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + doctor;
+    document.getElementById('setup-screen').classList.add('hidden');
+    startListeners();
+    toast('Connected to Firebase ✓', 'success');
+  } else {
+    alert('Firebase connection failed. Please check your config values.');
+  }
 };
-const persist = () => {
-  localStorage.setItem('tdxd_p', JSON.stringify(DB.patients));
-  localStorage.setItem('tdxd_c', JSON.stringify(DB.cycles));
-  localStorage.setItem('tdxd_e', JSON.stringify(DB.eot));
+
+window.showConfigModal = function() {
+  document.getElementById('modal_doctor').value = localStorage.getItem('tdxd_doctor') || '';
+  document.getElementById('config-modal').classList.add('show');
 };
+window.closeConfigModal = function() {
+  document.getElementById('config-modal').classList.remove('show');
+};
+window.saveModalConfig = function() {
+  const d = document.getElementById('modal_doctor').value.trim();
+  if (!d) { alert('Enter your name'); return; }
+  DOCTOR = d;
+  localStorage.setItem('tdxd_doctor', d);
+  document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + d;
+  closeConfigModal();
+  toast('Name updated', 'success');
+};
+window.resetConfig = function() {
+  if (!confirm('This will disconnect Firebase and reset the app config. Continue?')) return;
+  localStorage.removeItem('tdxd_fbcfg');
+  localStorage.removeItem('tdxd_doctor');
+  location.reload();
+};
+
+// ── ONLINE/OFFLINE ───────────────────────────────────────────
+window.addEventListener('offline', () => document.getElementById('offline-banner').classList.add('show'));
+window.addEventListener('online', () => document.getElementById('offline-banner').classList.remove('show'));
 
 // ── CTCAE ────────────────────────────────────────────────────
 const ctcaeItems = ['Nausea','Vomiting','Diarrhoea','Fatigue','Alopecia','Thrombocytopenia','Neutropenia','Anaemia','ALT elevation','AST elevation','Peripheral neuropathy','Stomatitis'];
 const ctcaeState = {};
-function buildCTCAE() {
+window.buildCTCAE = function() {
   const c = document.getElementById('ctcae-container');
   c.innerHTML = '';
   ctcaeItems.forEach(item => {
@@ -914,20 +1130,20 @@ function buildCTCAE() {
     d.innerHTML = `<div class="ctcae-label">${item}</div><div class="grade-row">${[0,1,2,3,4,5].map(n=>`<button type="button" class="grade-btn g${n}" onclick="pickGrade('${item}',${n},this)">${n}</button>`).join('')}</div>`;
     c.appendChild(d);
   });
-}
-function pickGrade(item, n, btn) {
+};
+window.pickGrade = function(item, n, btn) {
   ctcaeState[item] = n;
   btn.closest('.grade-row').querySelectorAll('.grade-btn').forEach(b => {
     b.className = `grade-btn g${b.textContent}`;
     if (parseInt(b.textContent) === n) b.classList.add('sel');
   });
-}
+};
 
 // ── UI HELPERS ───────────────────────────────────────────────
-function showCond(id, show) { document.getElementById(id).classList.toggle('show', !!show); }
-function toggleOtherSite() { showCond('other-site-cond', document.getElementById('a_site').value === 'Other'); }
+window.showCond = function(id, show) { document.getElementById(id)?.classList.toggle('show', !!show); };
+window.toggleOtherSite = function() { showCond('other-site-cond', document.getElementById('a_site').value === 'Other'); };
 function getSiteValue() { const s = document.getElementById('a_site').value; return s === 'Other' ? (document.getElementById('a_site_other').value.trim()||'Other') : s; }
-function toggleCheck(label) { const cb = label.querySelector('input'); setTimeout(() => label.classList.toggle('checked', cb.checked), 0); }
+window.toggleCheck = function(label) { const cb = label.querySelector('input'); setTimeout(() => label.classList.toggle('checked', cb.checked), 0); };
 function getChecked(name) { return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(c=>c.value).join(', '); }
 function setChecked(name, csv) {
   const vals = csv ? csv.split(', ') : [];
@@ -946,20 +1162,23 @@ function toast(msg, type) {
 }
 
 let confirmCallback = null;
-function showConfirm(icon, title, msg, btnLabel, cb) {
+window.showConfirm = function(icon, title, msg, btnLabel, cb) {
   document.getElementById('confirm-icon').textContent = icon;
   document.getElementById('confirm-title').textContent = title;
   document.getElementById('confirm-msg').textContent = msg;
   document.getElementById('confirm-ok-btn').textContent = btnLabel;
   confirmCallback = cb;
   document.getElementById('confirm-overlay').classList.add('show');
-}
-function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('show'); confirmCallback = null; }
+};
+window.closeConfirm = function() { document.getElementById('confirm-overlay').classList.remove('show'); confirmCallback = null; };
 document.getElementById('confirm-ok-btn').onclick = () => { if (confirmCallback) confirmCallback(); closeConfirm(); };
 
 // ── NAVIGATION ───────────────────────────────────────────────
 let editingPatientId = null;
-function goTo(id) {
+let currentScreen = 'dash';
+
+window.goTo = function(id) {
+  currentScreen = id;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('screen-' + id)?.classList.add('active');
@@ -974,18 +1193,18 @@ function goTo(id) {
   if (id === 'formB' || id === 'formC') fillDropdowns();
   if (id === 'patients') renderPatients();
   document.querySelector('.content').scrollTo(0, 0);
-}
-function goBack() { goTo('dash'); }
-function startNewA() { editingPatientId = null; clearA(); goTo('formA'); }
+};
+window.goBack = function() { goTo('dash'); };
+window.startNewA = function() { editingPatientId = null; clearA(); goTo('formA'); };
 
 // ── PROGRESS ─────────────────────────────────────────────────
-function calcProgA() {
+window.calcProgA = function() {
   const reqs = ['a_name','a_phone','a_site','a_sex','a_yob','a_metdate','a_startdate','a_hist','a_hr','a_her2ihc'];
   const filled = reqs.filter(id => { const el = document.getElementById(id); return el && el.value && el.value.trim() !== ''; }).length;
   const pct = Math.round(filled / reqs.length * 100);
   document.getElementById('prog-a').style.width = pct + '%';
   document.getElementById('prog-a-label').textContent = `${filled} of ${reqs.length} required fields complete`;
-}
+};
 
 // ── COLLECT FORM A ────────────────────────────────────────────
 function collectA() {
@@ -1032,15 +1251,16 @@ function collectA() {
     hrct: document.getElementById('a_hrct').value,
     hrctFindings: document.getElementById('a_hrctf')?.value||'',
     dlco: document.getElementById('a_dlco')?.value||'',
+    enteredBy: DOCTOR,
     savedAt: new Date().toISOString()
   };
 }
 
-// ── POPULATE FORM A (for editing) ────────────────────────────
+// ── POPULATE FORM A ───────────────────────────────────────────
 function populateA(p) {
   document.getElementById('a_name').value = p.name||'';
   document.getElementById('a_phone').value = p.phone||'';
-  const knownSites = ['مستشفى الامل الوطني لعلاج الاورام','مستشفى الاورام التعليمي','مستشفى الامامين الجوادين — مركز الامام الجواد لعلاج الاورام','مستشفى اليرموك — مركز علاج الاورام','مركز النجف لعلاج الاورام','مركز كربلاء لعلاج الاورام','Other',''];
+  const knownSites = ['مستشفى الامل الوطني لعلاج الاورام','مستشفى الاورام التعليمي','مركز الجواد لعلاج الاورام','مستشفى اليرموك — مركز علاج الاورام','مركز النجف لعلاج الاورام','مركز كربلاء لعلاج الاورام','Other',''];
   if (knownSites.includes(p.site||'')) { document.getElementById('a_site').value = p.site||''; } else { document.getElementById('a_site').value = 'Other'; document.getElementById('a_site_other').value = p.site||''; showCond('other-site-cond', true); }
   document.getElementById('a_sex').value = p.sex||'';
   document.getElementById('a_yob').value = p.yob||'';
@@ -1060,8 +1280,6 @@ function populateA(p) {
   showCond('cns-cond', p.cns && p.cns !== 'No brain mets');
   document.getElementById('a_cnsnl').value = p.cnsNL||'';
   document.getElementById('a_cnsdiam').value = p.cnsDiam||'';
-  document.getElementById('a_srs').value = p.srs||'';
-  document.getElementById('a_wbrt').value = p.wbrt||'';
   document.getElementById('a_lines').value = p.priorLines||'';
   document.getElementById('a_tras').value = p.tras||'';
   document.getElementById('a_pert').value = p.pert||'';
@@ -1086,39 +1304,45 @@ function populateA(p) {
 }
 
 // ── SAVE A ───────────────────────────────────────────────────
-function saveA() {
+window.saveA = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
   const name = document.getElementById('a_name').value.trim();
   const site = document.getElementById('a_site').value;
   if (!name || !site) { toast('Name and site are required', 'error'); return; }
   const rec = collectA();
-  if (editingPatientId) {
-    const idx = DB.patients.findIndex(p => p.id === editingPatientId);
-    if (idx > -1) DB.patients[idx] = rec;
-    toast('Record updated for ' + name);
-  } else {
-    DB.patients.push(rec);
-    toast('Patient saved: ' + name);
+  setSyncing();
+  try {
+    if (editingPatientId) {
+      const existing = DB.patients.find(p => p.id === editingPatientId);
+      if (existing?._fbId) {
+        await setDoc(doc(db, 'patients', existing._fbId), rec);
+        toast('Record updated for ' + name);
+      }
+    } else {
+      await addDoc(collection(db, 'patients'), rec);
+      toast('Patient saved: ' + name);
+    }
+    editingPatientId = null;
+    clearA();
+    goTo('dash');
+  } catch(e) {
+    toast('Save failed: ' + e.message, 'error');
   }
-  persist();
-  editingPatientId = null;
-  updateDash();
-  clearA();
-  goTo('dash');
-}
+};
 
-function clearA() {
+window.clearA = function() {
   document.querySelectorAll('#screen-formA input, #screen-formA select').forEach(el => {
     if (el.type === 'checkbox') el.checked = false; else el.value = '';
   });
   document.querySelectorAll('#screen-formA .check-item').forEach(l => l.classList.remove('checked'));
-  ['cns-cond','lung-cond','hrct-cond','other-site-cond'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['cns-cond','lung-cond','hrct-cond','other-site-cond'].forEach(id => showCond(id, false));
   document.getElementById('edit-banner-a').classList.remove('show');
   document.getElementById('save-a-btn').textContent = '💾 Save patient record';
   editingPatientId = null;
   calcProgA();
-}
+};
 
-function editPatient(id) {
+window.editPatient = function(id) {
   const p = DB.patients.find(x => x.id === id);
   if (!p) return;
   editingPatientId = id;
@@ -1129,24 +1353,29 @@ function editPatient(id) {
     document.getElementById('save-a-btn').textContent = '✅ Update patient record';
     document.querySelector('.content').scrollTo(0, 0);
   }, 50);
-}
+};
 
-function deletePatient(id) {
+window.deletePatient = function(id) {
   const p = DB.patients.find(x => x.id === id);
   if (!p) return;
-  showConfirm('🗑️', 'Delete patient?', `This will permanently delete ${p.name} and all their cycle and EOT records.`, 'Delete', () => {
-    DB.patients = DB.patients.filter(x => x.id !== id);
-    DB.cycles = DB.cycles.filter(c => c.pid !== id);
-    DB.eot = DB.eot.filter(e => e.pid !== id);
-    persist();
-    toast('Patient deleted');
-    updateDash();
-    renderPatients();
+  showConfirm('🗑️', 'Delete patient?', `This will permanently delete ${p.name} and all their records from the shared database.`, 'Delete', async () => {
+    setSyncing();
+    try {
+      if (p._fbId) await deleteDoc(doc(db, 'patients', p._fbId));
+      // delete related cycles and eot
+      for (const c of DB.cycles.filter(x => x.pid === id)) {
+        if (c._fbId) await deleteDoc(doc(db, 'cycles', c._fbId));
+      }
+      for (const e of DB.eot.filter(x => x.pid === id)) {
+        if (e._fbId) await deleteDoc(doc(db, 'eot', e._fbId));
+      }
+      toast('Patient deleted');
+    } catch(e) { toast('Delete failed: ' + e.message, 'error'); }
   });
-}
+};
 
 // ── FORM B ───────────────────────────────────────────────────
-function fillDropdowns() {
+window.fillDropdowns = function() {
   ['b_pid','c_pid'].forEach(selId => {
     const sel = document.getElementById(selId);
     if (!sel) return;
@@ -1155,14 +1384,14 @@ function fillDropdowns() {
     DB.patients.forEach(p => {
       const o = document.createElement('option');
       o.value = p.id;
-      o.textContent = p.name + ' — ' + p.site.split(' ')[0];
+      o.textContent = p.name + ' — ' + (p.site||'').split(' — ')[0];
       sel.appendChild(o);
     });
     if (cur) sel.value = cur;
   });
-}
+};
 
-function loadCtxB() {
+window.loadCtxB = function() {
   const pid = document.getElementById('b_pid').value;
   const ctx = document.getElementById('b_ctx');
   if (!pid) { ctx.style.display = 'none'; return; }
@@ -1170,109 +1399,113 @@ function loadCtxB() {
   if (!p) return;
   const prev = DB.cycles.filter(c => c.pid === pid).length;
   ctx.style.display = 'flex';
-  ctx.innerHTML = `📋 ${p.name} &nbsp;|&nbsp; HER2 ${p.her2ihc} &nbsp;|&nbsp; ${p.hr} &nbsp;|&nbsp; ECOG ${p.ecog} &nbsp;|&nbsp; Cycles recorded: ${prev}`;
-}
+  ctx.innerHTML = `📋 ${p.name} &nbsp;|&nbsp; HER2 ${p.her2ihc} &nbsp;|&nbsp; ${p.hr} &nbsp;|&nbsp; ECOG ${p.ecog} &nbsp;|&nbsp; Cycles: ${prev} &nbsp;|&nbsp; Entered by: ${p.enteredBy||'—'}`;
+};
 
-function saveB() {
+window.saveB = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
   const pid = document.getElementById('b_pid').value;
   const cycle = document.getElementById('b_cycle').value;
   if (!pid || !cycle) { toast('Patient and cycle no. are required', 'error'); return; }
   const hasILD = document.getElementById('b_resp').value === 'Yes' && document.getElementById('b_ildst').value !== 'Ruled out';
-  DB.cycles.push({
-    pid, cycle: parseInt(cycle), date: document.getElementById('b_date').value,
-    dosePlanned: document.getElementById('b_dosep').value, doseActual: document.getElementById('b_dosea').value,
-    doseMod: document.getElementById('b_dmod').value, doseModReason: document.getElementById('b_dmod_r').value,
-    ecog: document.getElementById('b_ecog').value,
-    imaging: document.getElementById('b_img').value, imgDate: document.getElementById('b_imgdate').value,
-    modality: document.getElementById('b_mod').value, recist: document.getElementById('b_recist').value,
-    sumDiam: document.getElementById('b_sumd').value, newLesion: document.getElementById('b_newl').value,
-    cnsImaging: document.getElementById('b_cnsimg').value, cnsResponse: document.getElementById('b_cnsr').value, cnsDiam: document.getElementById('b_cnsd').value,
-    respSympt: document.getElementById('b_resp').value, spo2: document.getElementById('b_spo2').value,
-    ildSx: getChecked('ildsx'), ildStatus: document.getElementById('b_ildst').value,
-    ildGrade: document.getElementById('b_ildgr').value, ildDate: document.getElementById('b_ildd').value,
-    ildHRCT: document.getElementById('b_ildhx').value, ildMgmt: document.getElementById('b_ildmg').value,
-    ildSteroid: document.getElementById('b_ilds').value, ildResolved: document.getElementById('b_ildrx').value,
-    ildRechallenge: document.getElementById('b_ildrch').value,
-    ...Object.fromEntries(Object.entries(ctcaeState).map(([k,v])=>['CTCAE_'+k, v!==null?v:''])),
-    wbc: document.getElementById('b_wbc').value, anc: document.getElementById('b_anc').value,
-    plt: document.getElementById('b_plt').value, hgb: document.getElementById('b_hgb').value,
-    alt: document.getElementById('b_alt').value, ast: document.getElementById('b_ast').value,
-    tbili: document.getElementById('b_tbili').value, creat: document.getElementById('b_creat').value,
-    hasILD, savedAt: new Date().toISOString()
-  });
-  persist();
-  const p = DB.patients.find(x => x.id === pid);
-  toast('Cycle ' + cycle + ' saved for ' + (p?.name||pid));
-  updateDash();
-  clearB();
-}
+  setSyncing();
+  try {
+    await addDoc(collection(db, 'cycles'), {
+      pid, cycle: parseInt(cycle), date: document.getElementById('b_date').value,
+      dosePlanned: document.getElementById('b_dosep').value, doseActual: document.getElementById('b_dosea').value,
+      doseMod: document.getElementById('b_dmod').value, doseModReason: document.getElementById('b_dmod_r').value,
+      ecog: document.getElementById('b_ecog').value,
+      imaging: document.getElementById('b_img').value, imgDate: document.getElementById('b_imgdate').value,
+      modality: document.getElementById('b_mod').value, recist: document.getElementById('b_recist').value,
+      sumDiam: document.getElementById('b_sumd').value, newLesion: document.getElementById('b_newl').value,
+      cnsImaging: document.getElementById('b_cnsimg').value, cnsResponse: document.getElementById('b_cnsr').value, cnsDiam: document.getElementById('b_cnsd').value,
+      respSympt: document.getElementById('b_resp').value, spo2: document.getElementById('b_spo2').value,
+      ildSx: getChecked('ildsx'), ildStatus: document.getElementById('b_ildst').value,
+      ildGrade: document.getElementById('b_ildgr').value, ildDate: document.getElementById('b_ildd').value,
+      ildHRCT: document.getElementById('b_ildhx').value, ildMgmt: document.getElementById('b_ildmg').value,
+      ildSteroid: document.getElementById('b_ilds').value, ildResolved: document.getElementById('b_ildrx').value,
+      ildRechallenge: document.getElementById('b_ildrch').value,
+      ...Object.fromEntries(Object.entries(ctcaeState).map(([k,v])=>['CTCAE_'+k, v!==null?v:''])),
+      wbc: document.getElementById('b_wbc').value, anc: document.getElementById('b_anc').value,
+      plt: document.getElementById('b_plt').value, hgb: document.getElementById('b_hgb').value,
+      alt: document.getElementById('b_alt').value, ast: document.getElementById('b_ast').value,
+      tbili: document.getElementById('b_tbili').value, creat: document.getElementById('b_creat').value,
+      hasILD, enteredBy: DOCTOR, savedAt: new Date().toISOString()
+    });
+    const p = DB.patients.find(x => x.id === pid);
+    toast('Cycle ' + cycle + ' saved for ' + (p?.name||pid));
+    clearB();
+  } catch(e) { toast('Save failed: ' + e.message, 'error'); }
+};
 
-function clearB() {
+window.clearB = function() {
   document.querySelectorAll('#screen-formB input, #screen-formB select').forEach(el => {
     if (el.type === 'checkbox') el.checked = false; else el.value = '';
   });
   document.querySelectorAll('#screen-formB .check-item').forEach(l => l.classList.remove('checked'));
-  ['dmod-cond','img-cond','cnsimg-cond','ild-cond'].forEach(id => document.getElementById(id).classList.remove('show'));
+  ['dmod-cond','img-cond','cnsimg-cond','ild-cond'].forEach(id => showCond(id, false));
   document.getElementById('b_ctx').style.display = 'none';
   buildCTCAE();
-}
+};
 
 // ── FORM C ───────────────────────────────────────────────────
-function saveC() {
+window.saveC = async function() {
+  if (!db) { toast('Not connected to Firebase', 'error'); return; }
   const pid = document.getElementById('c_pid').value;
   const type = document.getElementById('c_type').value;
   if (!pid || !type) { toast('Patient and record type required', 'error'); return; }
-  DB.eot.push({
-    pid, type, date: document.getElementById('c_date').value,
-    lastDose: document.getElementById('c_lastdose').value, totalCycles: document.getElementById('c_totcyc').value,
-    stopReason: document.getElementById('c_stop').value, stopTox: document.getElementById('c_stoptox').value,
-    bor: document.getElementById('c_bor').value,
-    responseDate: document.getElementById('c_rdate').value, pdDate: document.getElementById('c_pddate').value,
-    pdConfirmed: document.getElementById('c_pdconf').value, pdPattern: document.getElementById('c_pdpat').value,
-    ildAtEOT: document.getElementById('c_ildeot').value,
-    postProg: document.getElementById('c_nxtline').value, postAgent: document.getElementById('c_nxtagent').value, postDate: document.getElementById('c_nxtdate').value,
-    survival: document.getElementById('c_surv').value, ecog: document.getElementById('c_ecog').value,
-    dod: document.getElementById('c_dod').value, cod: document.getElementById('c_cod').value,
-    savedAt: new Date().toISOString()
-  });
-  persist();
-  const p = DB.patients.find(x => x.id === pid);
-  toast('EOT record saved for ' + (p?.name||pid));
-  updateDash();
-  clearC();
-}
+  setSyncing();
+  try {
+    await addDoc(collection(db, 'eot'), {
+      pid, type, date: document.getElementById('c_date').value,
+      lastDose: document.getElementById('c_lastdose').value, totalCycles: document.getElementById('c_totcyc').value,
+      stopReason: document.getElementById('c_stop').value, stopTox: document.getElementById('c_stoptox').value,
+      bor: document.getElementById('c_bor').value,
+      responseDate: document.getElementById('c_rdate').value, pdDate: document.getElementById('c_pddate').value,
+      pdConfirmed: document.getElementById('c_pdconf').value, pdPattern: document.getElementById('c_pdpat').value,
+      ildAtEOT: document.getElementById('c_ildeot').value,
+      postProg: document.getElementById('c_nxtline').value, postAgent: document.getElementById('c_nxtagent').value, postDate: document.getElementById('c_nxtdate').value,
+      survival: document.getElementById('c_surv').value, ecog: document.getElementById('c_ecog').value,
+      dod: document.getElementById('c_dod').value, cod: document.getElementById('c_cod').value,
+      enteredBy: DOCTOR, savedAt: new Date().toISOString()
+    });
+    const p = DB.patients.find(x => x.id === pid);
+    toast('EOT record saved for ' + (p?.name||pid));
+    clearC();
+  } catch(e) { toast('Save failed: ' + e.message, 'error'); }
+};
 
-function clearC() {
+window.clearC = function() {
   document.querySelectorAll('#screen-formC input, #screen-formC select').forEach(el => el.value = '');
-  ['stoptox-cond','nxtline-cond','death-cond'].forEach(id => document.getElementById(id).classList.remove('show'));
-}
+  ['stoptox-cond','nxtline-cond','death-cond'].forEach(id => showCond(id, false));
+};
 
 // ── DASHBOARD ────────────────────────────────────────────────
-function updateDash() {
+window.updateDash = function() {
   document.getElementById('s-patients').textContent = DB.patients.length;
   document.getElementById('s-cycles').textContent = DB.cycles.length;
   document.getElementById('s-eot').textContent = DB.eot.length;
   document.getElementById('s-ild').textContent = DB.cycles.filter(c=>c.hasILD).length;
   const list = document.getElementById('recent-list');
-  const recent = [...DB.patients].reverse().slice(0,5);
+  const recent = [...DB.patients].slice(0,5);
   if (!recent.length) {
     list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>No patients yet.<br>Tap + Form A to start.</p></div>';
     return;
   }
   list.innerHTML = recent.map(p => patientRowHTML(p)).join('');
-}
+};
 
 function patientRowHTML(p) {
   const cyc = DB.cycles.filter(c=>c.pid===p.id).length;
   const eotR = DB.eot.some(e=>e.pid===p.id);
   const ild = DB.cycles.some(c=>c.pid===p.id&&c.hasILD);
-  const initials = p.name.trim().split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  const initials = (p.name||'?').trim().split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
   return `<div class="patient-row">
     <div class="patient-avatar">${initials}</div>
     <div class="patient-info">
       <div class="patient-name">${p.name}</div>
-      <div class="patient-phone">📞 ${p.phone}</div>
-      <div class="patient-meta">${p.site.split(' — ')[0]} &bull; ${p.her2ihc} &bull; ${p.hr} &bull; Lines: ${p.priorLines||'—'}</div>
+      <div class="patient-entered-by">Entered by: ${p.enteredBy||'—'}</div>
+      <div class="patient-meta">${(p.site||'').split(' — ')[0]} &bull; HER2 ${p.her2ihc||'—'} &bull; ${p.hr||'—'} &bull; Lines: ${p.priorLines||'—'}</div>
       <div class="patient-badges">
         <span class="badge badge-a">A</span>
         ${cyc>0?`<span class="badge badge-b">B×${cyc}</span>`:''}
@@ -1287,30 +1520,44 @@ function patientRowHTML(p) {
   </div>`;
 }
 
-// ── ALL PATIENTS ──────────────────────────────────────────────
-function renderPatients() {
+window.renderPatients = function() {
   const el = document.getElementById('all-pts');
   if (!DB.patients.length) {
     el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>No patients enrolled yet</p></div>';
     return;
   }
-  el.innerHTML = [...DB.patients].reverse().map(p => patientRowHTML(p)).join('');
-}
+  el.innerHTML = DB.patients.map(p => patientRowHTML(p)).join('');
+};
 
 // ── EXPORT ───────────────────────────────────────────────────
-function exportExcel() {
+window.exportExcel = function() {
   if (!DB.patients.length) { toast('No data to export yet', 'error'); return; }
+  const XLSX = window.XLSX;
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.patients), 'Form_A_Baseline');
-  if (DB.cycles.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.cycles), 'Form_B_Cycles');
-  if (DB.eot.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.eot), 'Form_C_EOT');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.patients.map(({_fbId,...r})=>r)), 'Form_A_Baseline');
+  if (DB.cycles.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.cycles.map(({_fbId,...r})=>r)), 'Form_B_Cycles');
+  if (DB.eot.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(DB.eot.map(({_fbId,...r})=>r)), 'Form_C_EOT');
   XLSX.writeFile(wb, 'TDXd_Study_' + new Date().toISOString().slice(0,10) + '.xlsx');
   toast('Excel file downloaded');
-}
+};
 
 // ── INIT ─────────────────────────────────────────────────────
 buildCTCAE();
-updateDash();
+
+const savedCfg = getConfig();
+const savedDoctor = localStorage.getItem('tdxd_doctor');
+if (savedCfg && savedDoctor) {
+  if (initFirebase(savedCfg)) {
+    DOCTOR = savedDoctor;
+    document.getElementById('doctor-name-display').textContent = '👨‍⚕️ ' + savedDoctor;
+    document.getElementById('setup-screen').classList.add('hidden');
+    startListeners();
+  } else {
+    document.getElementById('setup-screen').classList.remove('hidden');
+  }
+}
+
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
 </html>
