@@ -1,0 +1,22 @@
+# Codespaces dev environment: Node.js 22 app container + PostgreSQL 16 (demo credentials only).
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    # Share the database container's network so the app reaches PostgreSQL on localhost
+    network_mode: service:db
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - oncosmart-pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: oncosmart
+      POSTGRES_PASSWORD: oncosmart_demo
+      POSTGRES_DB: oncosmart
+
+volumes:
+  oncosmart-pgdata:
