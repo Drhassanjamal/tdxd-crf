@@ -39,5 +39,7 @@ npm run db:seed
 
 echo "[oncosmart] building"
 npm run build
+# Record which commit was built so post-start.sh rebuilds after new commits are pulled
+git rev-parse HEAD > backend/dist/.source-rev 2>/dev/null || true
 
 echo "[oncosmart] setup complete"

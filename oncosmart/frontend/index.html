@@ -8,7 +8,19 @@
     <title>OncoSmart — Chemotherapy Unit</title>
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Replaced by the app on its first render -->
+      <div data-boot="loading" style="padding: 4rem 1rem; text-align: center; font-family: system-ui, sans-serif; color: #475569">
+        <div>Loading OncoSmart…</div>
+        <div dir="rtl" lang="ar">جارٍ تحميل OncoSmart…</div>
+      </div>
+    </div>
+    <noscript>
+      <div style="padding: 1rem; text-align: center; font-family: system-ui, sans-serif">
+        OncoSmart needs JavaScript. Please enable it in your browser settings.
+      </div>
+    </noscript>
+    <script src="/boot-check.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

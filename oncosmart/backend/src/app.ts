@@ -12,9 +12,12 @@ export function createApp() {
   const app = express();
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
+  const embeddable = env.FRAME_ANCESTORS.length > 0;
   app.use(
     helmet({
       hsts: env.COOKIE_SECURE,
+      // X-Frame-Options cannot list origins; when embedding is allowed, frame-ancestors governs it
+      ...(embeddable ? { xFrameOptions: false as const } : {}),
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
@@ -23,7 +26,7 @@ export function createApp() {
           imgSrc: ["'self'", 'data:'],
           fontSrc: ["'self'", 'data:'],
           connectSrc: ["'self'"],
-          frameAncestors: ["'none'"],
+          frameAncestors: embeddable ? ["'self'", ...env.FRAME_ANCESTORS] : ["'none'"],
           // Only force HTTPS sub-resources when the app is actually served over HTTPS
           upgradeInsecureRequests: env.COOKIE_SECURE ? [] : null,
         },

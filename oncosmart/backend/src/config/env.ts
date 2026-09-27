@@ -63,6 +63,11 @@ export const env = {
   NODE_ENV,
   isProduction,
   PORT: Number(process.env.PORT ?? 4000),
+  // Listen on all interfaces so container port forwarding (Docker, Codespaces) can reach the server
+  HOST: process.env.HOST || '0.0.0.0',
+  // Extra origins allowed to embed the app in a frame (CSP frame-ancestors). Empty = framing blocked.
+  // Only the Codespaces start script sets this, for the editor's port preview.
+  FRAME_ANCESTORS: (process.env.FRAME_ANCESTORS ?? '').split(/[\s,]+/).filter(Boolean),
   DATABASE_URL: process.env.DATABASE_URL ?? 'postgres://oncosmart@localhost:5432/oncosmart',
   JWT_SECRET: jwtSecret,
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '8h',

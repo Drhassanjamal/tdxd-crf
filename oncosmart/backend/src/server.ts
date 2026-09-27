@@ -6,8 +6,8 @@ import { startNotificationWorker, stopNotificationWorker } from './jobs/notifica
 async function main() {
   await pool.query('SELECT 1');
   const app = createApp();
-  const server = app.listen(env.PORT, () => {
-    console.log(`[oncosmart] API listening on http://localhost:${env.PORT} (${env.NODE_ENV}${env.DEMO_MODE ? ', DEMO MODE' : ''})`);
+  const server = app.listen(env.PORT, env.HOST, () => {
+    console.log(`[oncosmart] API listening on http://${env.HOST}:${env.PORT} (${env.NODE_ENV}${env.DEMO_MODE ? ', DEMO MODE' : ''})`);
     console.log(`[oncosmart] messaging provider: ${env.MESSAGING_PROVIDER}`);
   });
   startNotificationWorker();
